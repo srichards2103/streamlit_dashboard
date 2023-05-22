@@ -77,8 +77,10 @@ for index, row in missed_evs.iterrows():
 
 figure = plt.figure(figsize=(10, 5))
 sns.distplot(trades_evs["ev"], label="Placed")
+sns.distplot(missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
+
 
 # col3.hist(trades_p["EV"])
 
