@@ -111,8 +111,16 @@ col7, col8, col9 = st.columns(3)
 col7.header(
     f"All time Profit/Loss for Placed Bets: {sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float))}"
 )
+
+# suppose stake size of 20 for all missed bets
+# now compute return based on win being true or false
+missed_evs["stake_size"] = 20
+missed_evs["return"] = missed_evs["win"].apply(
+    lambda x: 0 if x == "False" else missed_evs["win_odds"].astype(float) * 20
+)
+
 col8.header(
-    f"All time Profit/Loss for Missed Bets: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
+    f"All time Profit/Loss for Missed Bets with Constant Bet Size of 20: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
 )
 
 
