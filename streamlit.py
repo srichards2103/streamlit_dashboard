@@ -109,10 +109,10 @@ col7, col8, col9 = st.columns(3)
 
 ## use trades_evs to determine profit/loss
 col7.header(
-    f"All time Profit/Loss for Placed Bets: {sum(trades_evs['return']) - sum(trades_evs['stake_size'])}"
+    f"All time Profit/Loss for Placed Bets: {sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float))}"
 )
 col8.header(
-    f"All time Profit/Loss for Missed Bets: {sum(missed_evs['return']) - sum(missed_evs['stake_size'])}"
+    f"All time Profit/Loss for Missed Bets: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
 )
 
 
