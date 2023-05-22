@@ -103,5 +103,18 @@ col5.header(f"All Time EV of Trades Placed: {trades_evs['ev'].mean()}")
 
 col6.header(f"All Time EV of Trades Missed: {missed_evs['ev'].mean()}")
 
+## Profit Loss
+
+col7, col8, col9 = st.columns(3)
+
+## use trades_evs to determine profit/loss
+col7.header(
+    f"All time Profit/Loss for Placed Bets: {sum(trades_evs['return']) - sum(trades_evs['stake_size'])}"
+)
+col8.header(
+    f"All time Profit/Loss for Missed Bets: {sum(missed_evs['return']) - sum(missed_evs['stake_size'])}"
+)
+
+
 # Display the full data at the end (not in a column)
 # st.write(data)
