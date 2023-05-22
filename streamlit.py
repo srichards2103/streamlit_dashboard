@@ -85,8 +85,8 @@ col3.pyplot(figure)
 col4, col5, col6 = st.columns(3)
 
 ## Add EV for all orders placed within past 24 hours from now
-now = pd.Timestamp(datetime.datetime.utcnow())
-trades_p["timestamp"] = pd.to_datetime(trades_p["timestamp"]).dt.tz_localize("UTC")
+now = datetime.datetime.utcnow()
+trades_p["timestamp"] = pd.to_datetime(trades_p["timestamp"])
 last_24 = trades_p.loc[trades_p["timestamp"] > now - datetime.timedelta(days=1)].copy()
 
 # Display Mean Forecasted EV from Past 24 hours
