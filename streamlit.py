@@ -94,9 +94,14 @@ last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
 
 # Now compute actual EV with bsp
 # last_24["actual_ev"] = last_24["win_odds"] / last_24["bsp"]
-day_evmean = last_24["EV"].mean()
+day_evmean = round(last_24["EV"].mean(), 3)
 
 col4.header(f"Mean Forecasted EV for Past 24 hours: {day_evmean}")
+
+## Calculate all time EV
+col5.header(f"All Time EV of Trades Placed: {trades_evs['ev'].mean()}")
+
+col6.header(f"All Time EV of Trades Missed: {missed_evs['ev'].mean()}")
 
 # Display the full data at the end (not in a column)
 # st.write(data)
