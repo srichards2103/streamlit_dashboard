@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import datetime
 
 # from dotenv import load_dotenv
 # import os
@@ -81,8 +82,20 @@ sns.distplot(missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
 
+col4, col5, col6 = st.columns(3)
 
-# col3.hist(trades_p["EV"])
+## Add EV for all orders placed within past 24 hours from now
+now = datetime.datetime.utcnow()
+
+trades_p["timestamp"] = pd.to_datetime(trades_p["timestamp"]).dt.tz_localize("UTC")
+last_24 = trades_p[trades_p["timestamp"] > now - datetime.delta(days=1)]
+
+# Display Mean Forecasted EV from Past 24 hours
+last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
+
+day_evmean = last_24["EV"].mean()
+
+col4.header(f"Mean Forecasted EV for Past 24 hours: {day_evmean}")
 
 # Display the full data at the end (not in a column)
 # st.write(data)
