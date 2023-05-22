@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # from dotenv import load_dotenv
 # import os
 
-load_dotenv()
+# load_dotenv()
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
