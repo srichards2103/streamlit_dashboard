@@ -3,8 +3,9 @@ from pymongo import MongoClient
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from dotenv import load_dotenv
-import os
+
+# from dotenv import load_dotenv
+# import os
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ plot_height = st.sidebar.slider("Specify plot height", 200, 500, 250)
 
 # Connect to MongoDB
 
-MONGO_URL = os.getenv("MONGO_URL")
+MONGO_URL = st.secrets["MONGO_URL"]
 client = MongoClient(MONGO_URL)
 db = client.BettingData
 collection = db.Trades
