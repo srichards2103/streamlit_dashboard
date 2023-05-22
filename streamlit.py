@@ -53,7 +53,9 @@ col1.line_chart(trades_p["balance"])
 # Table of Last 20 Placed and Not Placed Trades in the second column
 
 col2.header("10 Most Recent Trades")
-col2.table(trades_p[["win_odds", "balance", "bsp"]].tail(10))
+col2.table(
+    trades_p[["win_odds", "balance", "best_lay_price", "stake_size", "bsp"]].tail(10)
+)
 # col2.header("Not Placed Trades")
 # col2.table(trades_np)
 
