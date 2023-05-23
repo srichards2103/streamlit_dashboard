@@ -96,9 +96,13 @@ last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
 # last_24["actual_ev"] = last_24["win_odds"] / last_24["bsp"]
 day_evmean = round(last_24["EV"].mean(), 3)
 
-trades_evs["expected_return"] = trades_evs["ev"].astype(float) * trades_evs[
+trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs[
+    "win_odds"
+].astype(float) - (1 - 1 / trades_evs["bsp"].astype(float)) * trades_evs[
     "stake_size"
-].astype(float)
+].astype(
+    float
+)
 
 total_waged = sum(trades_evs["stake_size"].astype(float))
 col4.header(
@@ -130,6 +134,17 @@ missed_evs["return"] = missed_evs.apply(
 col8.header(
     f"All time Profit/Loss for Missed Bets with Constant Bet Size of 20: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
 )
+
+## display average ev for each bucket of odds,
+## bucket size is 1 dollar wide,
+## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
+
+col9.header("Average EV for Each Bucket of Odds")
+
+## plot
+## plot average ev for each bucket of odds
+## bucket size is 1 dollar wide,
+## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
 
 
 # Display the full data at the end (not in a column)
