@@ -168,23 +168,23 @@ profit_loss_missed = sum(missed_evs["return"].astype(float)) - sum(
 )
 
 st.markdown(
-    f"""
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Key Metrics</h5>
-            <p class="card-text">
-            **Expected Profit (EV of Bets Placed):** {ev_bets_placed}
-            **Expected Profit (EV of Missed Bets):** {ev_missed_bets}
-            **All Time EV of Trades Placed:** {ev_all_time_placed}
-            **All Time EV of Trades Missed:** {ev_all_time_missed}
-            **All time Profit/Loss for Placed Bets:** {profit_loss_placed}
-            **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {profit_loss_missed}
-            **Average EV for Each Bucket of Odds**
-            </p>
-        </div>
-    </div>
-""",
-    unsafe_allow_html=True,
+    """
+    ### Key Metrics
+    - **Expected Profit (EV of Bets Placed):** {:.2f}
+    - **Expected Profit (EV of Missed Bets):** {:.2f}
+    - **All Time EV of Trades Placed:** {:.3f}
+    - **All Time EV of Trades Missed:** {:.3f}
+    - **All time Profit/Loss for Placed Bets:** {:.2f}
+    - **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {:.2f}
+    - **Average EV for Each Bucket of Odds**
+""".format(
+        ev_bets_placed,
+        ev_missed_bets,
+        ev_all_time_placed,
+        ev_all_time_missed,
+        profit_loss_placed,
+        profit_loss_missed,
+    )
 )
 
 
