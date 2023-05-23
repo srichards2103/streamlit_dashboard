@@ -154,18 +154,31 @@ col8.header(
 ## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
 
 
+ev_bets_placed = sum(trades_evs["expected_return"].astype(float))
+ev_missed_bets = sum(missed_evs["expected_return"].astype(float))
+ev_all_time_placed = round(trades_evs["ev"].mean(), 3)
+ev_all_time_missed = round(missed_evs["ev"].mean(), 3)
+profit_loss_placed = round(
+    sum(trades_evs["return"].astype(float))
+    - sum(trades_evs["stake_size"].astype(float)),
+    4,
+)
+profit_loss_missed = sum(missed_evs["return"].astype(float)) - sum(
+    missed_evs["stake_size"].astype(float)
+)
+
 st.markdown(
-    """
+    f"""
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Key Metrics</h5>
             <p class="card-text">
-            **Expected Profit (EV of Bets Placed):** {sum(trades_evs['expected_return'].astype(float))}
-            **Expected Profit (EV of Missed Bets):** {sum(missed_evs['expected_return'].astype(float))}
-            **All Time EV of Trades Placed:** {round(trades_evs['ev'].mean(), 3)}
-            **All Time EV of Trades Missed:** {round(missed_evs['ev'].mean(), 3)}
-            **All time Profit/Loss for Placed Bets:** {round(sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float)), 4)}
-            **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}
+            **Expected Profit (EV of Bets Placed):** {ev_bets_placed}
+            **Expected Profit (EV of Missed Bets):** {ev_missed_bets}
+            **All Time EV of Trades Placed:** {ev_all_time_placed}
+            **All Time EV of Trades Missed:** {ev_all_time_missed}
+            **All time Profit/Loss for Placed Bets:** {profit_loss_placed}
+            **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {profit_loss_missed}
             **Average EV for Each Bucket of Odds**
             </p>
         </div>
@@ -173,6 +186,7 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
 
 ## plot
 ## plot average ev for each bucket of odds
