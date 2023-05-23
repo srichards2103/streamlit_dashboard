@@ -53,9 +53,9 @@ col1.line_chart(trades_p["balance"])
 
 # Table of Last 20 Placed and Not Placed Trades in the second column
 
-col2.header("10 Most Recent Trades")
+col2.header("100 Most Recent Trades Placed")
 col2.table(
-    trades_p[["win_odds", "balance", "best_lay_price", "stake_size", "bsp"]].tail(10)
+    trades_p[["win_odds", "balance", "best_lay_price", "stake_size", "bsp"]].tail(100)
 )
 # col2.header("Not Placed Trades")
 # col2.table(trades_np)
@@ -99,9 +99,9 @@ day_evmean = round(last_24["EV"].mean(), 3)
 col4.header(f"Mean Forecasted EV for Past 24 hours: {day_evmean}")
 
 ## Calculate all time EV
-col5.header(f"All Time EV of Trades Placed: {trades_evs['ev'].mean()}")
+col5.header(f"All Time EV of Trades Placed: {round(trades_evs['ev'].mean(), 3)}")
 
-col6.header(f"All Time EV of Trades Missed: {missed_evs['ev'].mean()}")
+col6.header(f"All Time EV of Trades Missed: {round(missed_evs['ev'].mean(), 3)}")
 
 ## Profit Loss
 
@@ -109,7 +109,7 @@ col7, col8, col9 = st.columns(3)
 
 ## use trades_evs to determine profit/loss
 col7.header(
-    f"All time Profit/Loss for Placed Bets: {sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float))}"
+    f"All time Profit/Loss for Placed Bets: {round(sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float)), 4)}"
 )
 
 # suppose stake size of 20 for all missed bets
@@ -123,6 +123,8 @@ missed_evs["return"] = missed_evs.apply(
 col8.header(
     f"All time Profit/Loss for Missed Bets with Constant Bet Size of 20: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
 )
+
+col9.header(f"Past 24 Hours Placed Bets EV: ")
 
 
 # Display the full data at the end (not in a column)
