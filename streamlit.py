@@ -154,6 +154,18 @@ col8.header(
 ## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
 
 col9.header("Average EV for Each Bucket of Odds")
+with st.beta_expander("Key Metrics"):
+    st.markdown(
+        f"""
+        **Expected Profit (EV of Bets Placed):** {sum(trades_evs['expected_return'].astype(float))}
+        **Expected Profit (EV of Missed Bets):** {sum(missed_evs['expected_return'].astype(float))}
+        **All Time EV of Trades Placed:** {round(trades_evs['ev'].mean(), 3)}
+        **All Time EV of Trades Missed:** {round(missed_evs['ev'].mean(), 3)}
+        **All time Profit/Loss for Placed Bets:** {round(sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float)), 4)}
+        **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}
+        **Average EV for Each Bucket of Odds**
+        """
+    )
 
 ## plot
 ## plot average ev for each bucket of odds
