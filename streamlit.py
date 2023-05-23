@@ -96,10 +96,13 @@ last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
 # last_24["actual_ev"] = last_24["win_odds"] / last_24["bsp"]
 day_evmean = round(last_24["EV"].mean(), 3)
 
-all_time_ev_placed = round(trades_evs["ev"].mean(), 3)
+trades_evs["expected_return"] = trades_evs.apply(
+    lambda row: row["stake_size"] * row["ev"], axis=1
+)
+
 total_waged = sum(trades_evs["stake_size"].astype(float))
 col4.header(
-    f"Amount Wagered: {total_waged}, Expected Return: {all_time_ev_placed * total_waged}"
+    f"Amount Wagered: {total_waged}, Expected Return: {sum(trades_evs['expected_return'].astype(float))}"
 )
 
 ## Calculate all time EV
