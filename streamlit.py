@@ -106,11 +106,27 @@ trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs
     float
 )
 
+
 total_waged = sum(trades_evs["stake_size"].astype(float))
 col4.header(
-    f"Amount Wagered: {total_waged}, Expected Return: {sum(trades_evs['expected_return'].astype(float))}"
+    f"Expected Profit (EV of Bets Placed): {sum(trades_evs['expected_return'].astype(float))}"
 )
 
+missed_evs["stake_size"] = 20
+
+missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs[
+    "win_odds"
+].astype(float) * missed_evs["stake_size"].astype(float) - (
+    1 - 1 / missed_evs["bsp"].astype(float)
+) * missed_evs[
+    "stake_size"
+].astype(
+    float
+)
+
+col5.header(
+    f"Expected Profit (EV of Missed Bets): {sum(missed_evs['expected_return'].astype(float))}"
+)
 ## Calculate all time EV
 col5.header(f"All Time EV of Trades Placed: {round(trades_evs['ev'].mean(), 3)}")
 
@@ -127,10 +143,6 @@ col7.header(
 
 # suppose stake size of 20 for all missed bets
 # now compute return based on win being true or false
-missed_evs["stake_size"] = 20
-missed_evs["return"] = missed_evs.apply(
-    lambda row: 0 if row["win"] == False else row["win_odds"] * 20, axis=1
-)
 
 
 col8.header(
