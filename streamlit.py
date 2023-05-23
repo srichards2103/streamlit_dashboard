@@ -167,24 +167,17 @@ profit_loss_missed = sum(missed_evs["return"].astype(float)) - sum(
     missed_evs["stake_size"].astype(float)
 )
 
-st.markdown(
-    """
-    ### Key Metrics
-    - **Expected Profit (EV of Bets Placed):** {:.2f}
-    - **Expected Profit (EV of Missed Bets):** {:.2f}
-    - **All Time EV of Trades Placed:** {:.3f}
-    - **All Time EV of Trades Missed:** {:.3f}
-    - **All time Profit/Loss for Placed Bets:** {:.2f}
-    - **All time Profit/Loss for Missed Bets with Constant Bet Size of 20:** {:.2f}
-    - **Average EV for Each Bucket of Odds**
-""".format(
-        ev_bets_placed,
-        ev_missed_bets,
-        ev_all_time_placed,
-        ev_all_time_missed,
-        profit_loss_placed,
-        profit_loss_missed,
-    )
+st.metric(label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None)
+st.metric(label="Expected Profit (EV of Missed Bets)", value=ev_missed_bets, delta=None)
+st.metric(label="All Time EV of Trades Placed", value=ev_all_time_placed, delta=None)
+st.metric(label="All Time EV of Trades Missed", value=ev_all_time_missed, delta=None)
+st.metric(
+    label="All time Profit/Loss for Placed Bets", value=profit_loss_placed, delta=None
+)
+st.metric(
+    label="All time Profit/Loss for Missed Bets with Constant Bet Size of 20",
+    value=profit_loss_missed,
+    delta=None,
 )
 
 
