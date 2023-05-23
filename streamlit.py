@@ -98,7 +98,9 @@ day_evmean = round(last_24["EV"].mean(), 3)
 
 trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs[
     "win_odds"
-].astype(float) - (1 - 1 / trades_evs["bsp"].astype(float)) * trades_evs[
+].astype(float) * trades_evs["stake_size"].astype(float) - (
+    1 - 1 / trades_evs["bsp"].astype(float)
+) * trades_evs[
     "stake_size"
 ].astype(
     float
