@@ -108,10 +108,6 @@ trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs
 
 
 total_waged = sum(trades_evs["stake_size"].astype(float))
-col4.header(
-    f"Expected Profit (EV of Bets Placed): {sum(trades_evs['expected_return'].astype(float))}"
-)
-
 missed_evs["stake_size"] = 20
 
 missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs[
@@ -124,38 +120,20 @@ missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs
     float
 )
 
-col5.header(
-    f"Expected Profit (EV of Missed Bets): {sum(missed_evs['expected_return'].astype(float))}"
-)
-## Calculate all time EV
-col5.header(f"All Time EV of Trades Placed: {round(trades_evs['ev'].mean(), 3)}")
-
-col6.header(f"All Time EV of Trades Missed: {round(missed_evs['ev'].mean(), 3)}")
 
 ## Profit Loss
 
-col7, col8, col9 = st.columns(3)
 
 ## use trades_evs to determine profit/loss
-col7.header(
-    f"All time Profit/Loss for Placed Bets: {round(sum(trades_evs['return'].astype(float)) - sum(trades_evs['stake_size'].astype(float)), 4)}"
-)
 
-# suppose stake size of 20 for all missed bets
-# now compute return based on win being true or false
-
-
-col8.header(
-    f"All time Profit/Loss for Missed Bets with Constant Bet Size of 20: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
-)
 
 ## display average ev for each bucket of odds,
 ## bucket size is 1 dollar wide,
 ## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
 
 
-ev_bets_placed = sum(trades_evs["expected_return"].astype(float))
-ev_missed_bets = sum(missed_evs["expected_return"].astype(float))
+ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 5)
+ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 5)
 ev_all_time_placed = round(trades_evs["ev"].mean(), 3)
 ev_all_time_missed = round(missed_evs["ev"].mean(), 3)
 profit_loss_placed = round(
@@ -163,21 +141,23 @@ profit_loss_placed = round(
     - sum(trades_evs["stake_size"].astype(float)),
     4,
 )
-profit_loss_missed = sum(missed_evs["return"].astype(float)) - sum(
-    missed_evs["stake_size"].astype(float)
-)
 
-st.metric(label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None)
-st.metric(label="Expected Profit (EV of Missed Bets)", value=ev_missed_bets, delta=None)
-st.metric(label="All Time EV of Trades Placed", value=ev_all_time_placed, delta=None)
-st.metric(label="All Time EV of Trades Missed", value=ev_all_time_missed, delta=None)
-st.metric(
-    label="All time Profit/Loss for Placed Bets", value=profit_loss_placed, delta=None
+cols = st.columns(5)
+
+cols[0].metric(
+    label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None
 )
-st.metric(
-    label="All time Profit/Loss for Missed Bets with Constant Bet Size of 20",
-    value=profit_loss_missed,
-    delta=None,
+cols[1].metric(
+    label="Expected Profit (EV of Missed Bets)", value=ev_missed_bets, delta=None
+)
+cols[2].metric(
+    label="All Time EV of Trades Placed", value=ev_all_time_placed, delta=None
+)
+cols[3].metric(
+    label="All Time EV of Trades Missed", value=ev_all_time_missed, delta=None
+)
+cols[4].metric(
+    label="All time Profit/Loss for Placed Bets", value=profit_loss_placed, delta=None
 )
 
 
