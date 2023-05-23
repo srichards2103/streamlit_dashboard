@@ -96,7 +96,11 @@ last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
 # last_24["actual_ev"] = last_24["win_odds"] / last_24["bsp"]
 day_evmean = round(last_24["EV"].mean(), 3)
 
-col4.header(f"Mean Forecasted EV for Past 24 hours: {day_evmean}")
+all_time_ev_placed = round(trades_evs["ev"].mean(), 3)
+total_waged = sum(trades_evs["stake_size"].astype(float))
+col4.header(
+    f"Amount Wagered: {total_waged}, Expected Return: {all_time_ev_placed * total_waged}"
+)
 
 ## Calculate all time EV
 col5.header(f"All Time EV of Trades Placed: {round(trades_evs['ev'].mean(), 3)}")
@@ -123,8 +127,6 @@ missed_evs["return"] = missed_evs.apply(
 col8.header(
     f"All time Profit/Loss for Missed Bets with Constant Bet Size of 20: {sum(missed_evs['return'].astype(float)) - sum(missed_evs['stake_size'].astype(float))}"
 )
-
-col9.header(f"Past 24 Hours Placed Bets EV: ")
 
 
 # Display the full data at the end (not in a column)
