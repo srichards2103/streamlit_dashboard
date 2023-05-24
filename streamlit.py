@@ -242,9 +242,11 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 # st.write(data)
 # Compute pairwise correlation of columns, excluding NA/null values.
 # Select only numeric columns
-## Find Performance from Last 24 hours
+## Find Performance from Last 48 hours
 
-last_24 = trades_p.loc[trades_p["timestamp"] > now - datetime.timedelta(days=1)].copy()
+last_24 = trades_evs.loc[
+    trades_evs["timestamp"] > now - datetime.timedelta(days=2)
+].copy()
 
 # Opening Balance
 opening_balance = last_24["balance"].iloc[0]
@@ -273,7 +275,7 @@ last_24["return"] = sum(last_24["return"].astype(float))
 average_odds = round(last_24["bsp"].astype(float).mean(), 3)
 
 # Display on Dashvoard
-st.header("Last 24 Hours")
+st.header("Last 48 Hours")
 cols = st.columns(6)
 cols[0].metric(label="Opening Balance", value=opening_balance, delta=None)
 cols[1].metric(label="Closing Balance", value=closing_balance, delta=None)
