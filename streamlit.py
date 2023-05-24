@@ -176,10 +176,9 @@ average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 cols = st.columns(7)
 
 # filter out duplicates of runners
-filtered_missed = missed_evs.drop_duplicates(subset=["runner_name"])
 
 percentage_missed = round(
-    len(filtered_missed) / (len(filtered_missed) + len(trades_evs)) * 100, 2
+    len(missed_evs) / (len(missed_evs) + len(trades_evs)) * 100, 2
 )
 cols[0].metric(
     label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None
@@ -199,6 +198,16 @@ cols[4].metric(
 # cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
 cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
 cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
+
+
+## Find all winning bets where return > 0
+
+winning_bets = trades_evs.loc[trades_evs["return"] > 0].copy()
+
+# histogram of distribution amonst event_type
+
+st.bar_chart(winning_bets["event_type"])
+
 
 ## plot
 ## plot average ev for each bucket of odds
