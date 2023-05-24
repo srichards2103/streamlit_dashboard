@@ -121,15 +121,20 @@ missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs
 )
 
 
-## Profit Loss
+# Closing Line
 
+trades_evs["clv"] = trades_evs["stake_size"].astype(float) * (
+    trades_evs["win_odds"].astype(float) / trades_evs["bsp"].astype(float) - 1
+)
+# Create a line chart
+plt.figure(figsize=(15, 7))
+sns.lineplot(data=trades_evs["clv"], x="time", y="cumulative_clv")
+plt.title("Cumulative Closing Line Value Over Time")
+plt.ylabel("Cumulative CLV")
+plt.xlabel("Date")
 
-## use trades_evs to determine profit/loss
-
-
-## display average ev for each bucket of odds,
-## bucket size is 1 dollar wide,
-## so 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
+# Display the chart in the Streamlit app
+st.pyplot(plt.gcf())
 
 
 ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 5)
