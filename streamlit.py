@@ -204,9 +204,15 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 
 winning_bets = trades_evs.loc[trades_evs["return"] > 0].copy()
 
-# histogram of distribution amonst event_type
+# histogram of distribution of wins amongst bet_type
 
-st.bar_chart(winning_bets["race_type"])
+figure = plt.figure(figsize=(15, 7))
+plt.hist(winning_bets["bet_type"], bins=20)
+plt.title("Distribution of Winning Bets by Bet Type")
+plt.xlabel("Bet Type")
+plt.ylabel("Frequency")
+plt.xticks(rotation=45)
+st.pyplot(figure)
 
 
 ## plot
