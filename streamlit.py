@@ -126,9 +126,12 @@ missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs
 trades_evs["clv"] = trades_evs["stake_size"].astype(float) * (
     trades_evs["win_odds"].astype(float) / trades_evs["bsp"].astype(float) - 1
 )
+# Calculate cumulative total of CLV
+trades_evs["cumulative_clv"] = trades_evs["clv"].cumsum()
+
 # Create a line chart
 plt.figure(figsize=(15, 7))
-sns.lineplot(data=trades_evs["clv"], x="time", y="cumulative_clv")
+sns.lineplot(data=trades_evs, x="timestamp", y="cumulative_clv")
 plt.title("Cumulative Closing Line Value Over Time")
 plt.ylabel("Cumulative CLV")
 plt.xlabel("Date")
