@@ -82,12 +82,6 @@ sns.distplot(missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
 
-# Total Trades Placed
-st.header("Total Trades Placed")
-
-cols_x = st.columns(2)
-cols_x[0].metric = ("Total Trades Placed", len(trades_p), None)
-col4, col5, col6 = st.columns(3)
 
 ## Add EV for all orders placed within past 24 hours from now
 now = datetime.datetime.utcnow()
@@ -207,10 +201,11 @@ profit_loss_placed = round(
     - sum(trades_evs["stake_size"].astype(float)),
     4,
 )
+total_bets_placed = len(trades_p)
 # average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
 average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
-cols = st.columns(7)
+cols = st.columns(8)
 
 # filter out duplicates of runners
 
@@ -235,6 +230,7 @@ cols[4].metric(
 # cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
 cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
 cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
+cols[7].metric(label="Total Bets Placed", value=total_bets_placed, delta=None)
 
 
 ## plot
