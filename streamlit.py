@@ -52,10 +52,10 @@ col1.header("Balance Over Time")
 col1.line_chart(trades_p["balance"])
 
 # Table of Last 20 Placed and Not Placed Trades in the second column
-
+pd.set_option("display.max_rows", 10)
 col2.header("100 Most Recent Trades Placed")
 col2.table(
-    trades_p[["win_odds", "bsp", "balance", "best_lay_price", "stake_size"]].tail(100)
+    trades_p[["win_odds", "bsp", "balance", "best_lay_price", "stake_size"]].tail(10)
 )
 # col2.header("Not Placed Trades")
 # col2.table(trades_np)
