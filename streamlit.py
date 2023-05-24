@@ -173,8 +173,11 @@ profit_loss_placed = round(
 # average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
 average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
-cols = st.columns(6)
+cols = st.columns(7)
 
+percentage_missed = round(
+    len(missed_evs) / (len(missed_evs) + len(trades_evs)) * 100, 2
+)
 cols[0].metric(
     label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None
 )
@@ -192,7 +195,7 @@ cols[4].metric(
 )
 # cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
 cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
-
+cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 
 ## plot
 ## plot average ev for each bucket of odds
