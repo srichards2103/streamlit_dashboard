@@ -141,10 +141,10 @@ profit_loss_placed = round(
     - sum(trades_evs["stake_size"].astype(float)),
     4,
 )
-average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
+# average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
 average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
-cols = st.columns(7)
+cols = st.columns(6)
 
 cols[0].metric(
     label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None
@@ -161,8 +161,8 @@ cols[3].metric(
 cols[4].metric(
     label="All time Profit/Loss for Placed Bets", value=profit_loss_placed, delta=None
 )
-cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
-cols[6].metric(label="Average Odds BSP", value=average_bsp, delta=None)
+# cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
+cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
 
 
 ## plot
