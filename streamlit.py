@@ -241,7 +241,13 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 # Display the full data at the end (not in a column)
 # st.write(data)
 # Compute pairwise correlation of columns, excluding NA/null values.
-corr_matrix = trades_evs.corr()
+# Select only numeric columns
+import numpy as np
+
+numeric_cols = trades_evs.select_dtypes(include=[np.number])
+
+# Compute pairwise correlation of columns, excluding NA/null values.
+corr_matrix = numeric_cols.corr()
 
 # Create a heatmap
 plt.figure(figsize=(10, 8))
