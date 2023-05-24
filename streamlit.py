@@ -243,7 +243,7 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 # Compute pairwise correlation of columns, excluding NA/null values.
 # Select only numeric columns
 ## Find Performance from Last 48 hours
-
+trades_evs["timestamp"] = pd.to_datetime(trades_evs["timestamp"])
 last_24 = trades_evs.loc[
     trades_evs["timestamp"] > now - datetime.timedelta(days=2)
 ].copy()
