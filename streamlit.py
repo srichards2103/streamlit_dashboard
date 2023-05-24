@@ -136,23 +136,23 @@ trades_evs["cumulative_return"] = trades_evs["return"].cumsum()
 
 # Create a line chart
 plt.figure(figsize=(15, 7))
-plt.plot(trades_evs["timestamp"], trades_evs["cumulative_clv"], label="Cumulative CLV")
+plt.plot(trades_evs.index, trades_evs["cumulative_clv"], label="Cumulative CLV")
 plt.plot(
-    trades_evs["timestamp"],
+    trades_evs.index,
     trades_evs["cumulative_return"],
     label="Cumulative Return",
     color="orange",
 )
 
 # Fill the area under the lines
-plt.fill_between(trades_evs["timestamp"], trades_evs["cumulative_clv"], alpha=0.3)
+plt.fill_between(trades_evs.index, trades_evs["cumulative_clv"], alpha=0.3)
 plt.fill_between(
-    trades_evs["timestamp"], trades_evs["cumulative_return"], alpha=0.3, color="orange"
+    trades_evs.index, trades_evs["cumulative_return"], alpha=0.3, color="orange"
 )
 
 plt.title("Cumulative Closing Line Value and Return Over Time")
 plt.ylabel("Cumulative Value")
-plt.xlabel("Date")
+plt.xlabel("Index")
 plt.legend()
 
 # Display the chart in the Streamlit app
