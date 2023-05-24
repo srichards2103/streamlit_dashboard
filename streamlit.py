@@ -141,8 +141,8 @@ profit_loss_placed = round(
     - sum(trades_evs["stake_size"].astype(float)),
     4,
 )
-average_odds = round(trades_evs["win_odds"].mean(), 3)
-average_bsp = round(trades_evs["bsp"].mean(), 3)
+average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
+average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
 cols = st.columns(7)
 
