@@ -267,3 +267,17 @@ plt.figure(figsize=(10, 8))
 sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
 
 st.pyplot(plt.gcf())
+
+## Find % of odds that have win odds smaller than second_to_best_lay_prices that have less than 1 ev
+
+small_win_odds = trades_evs[
+    trades_evs["win_odds"] < trades_evs["second_to_best_lay_prices"]
+]
+ev_small = small_win_odds[small_win_odds["ev"] < 1]
+ev_large = small_win_odds[small_win_odds["ev"] > 1]
+
+percentage_ev_small = round(len(ev_small) / len(small_win_odds) * 100, 2)
+percentage_ev_large = round(len(ev_large) / len(small_win_odds) * 100, 2)
+
+st.write("Percentage of odds that have less than 1 ev: ", percentage_ev_small)
+st.write("Percentage of odds that have more than 1 ev: ", percentage_ev_large)
