@@ -132,7 +132,10 @@ trades_evs["cumulative_clv"] = trades_evs["clv"].cumsum()
 # st.line_chart(trades_evs["cumulative_clv"])
 
 # Calculate cumulative total of actual return
-trades_evs["cumulative_return"] = trades_evs["return"].cumsum()
+trades_evs["profit"] = trades_evs["return"].astype(float) - trades_evs[
+    "stake_size"
+].astype(float)
+trades_evs["cumulative_return"] = trades_evs["profit"].cumsum()
 
 # Create a line chart
 plt.figure(figsize=(15, 7))
