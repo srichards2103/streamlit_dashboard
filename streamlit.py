@@ -242,4 +242,42 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 # st.write(data)
 # Compute pairwise correlation of columns, excluding NA/null values.
 # Select only numeric columns
-## Find % of odds that have win odds smaller than second_to_best_lay_prices that have less than 1 ev
+## Find Performance from Last 24 hours
+
+last_24 = trades_p.loc[trades_p["timestamp"] > now - datetime.timedelta(days=1)].copy()
+
+# Opening Balance
+opening_balance = last_24["balance"].iloc[0]
+
+# Closing Balance
+closing_balance = last_24["balance"].iloc[-1]
+
+# filter out trades where bsp is 0 or null
+last_24 = last_24[last_24["bsp"] > 0]
+last_24 = last_24[last_24["bsp"].notnull()]
+
+# Calculate performance from last night
+# Bets Placed
+num_bets = len(last_24)
+
+# Bets Won
+num_wins = len(last_24[last_24["return"] > 0])
+
+# Bets Lost
+num_losses = len(last_24[last_24["return"] == 0])
+
+# Total Return
+last_24["return"] = sum(last_24["return"].astype(float))
+
+# Average Odds
+average_odds = round(last_24["bsp"].astype(float).mean(), 3)
+
+# Display on Dashvoard
+st.header("Last 24 Hours")
+cols = st.columns(6)
+cols[0].metric(label="Opening Balance", value=opening_balance, delta=None)
+cols[1].metric(label="Closing Balance", value=closing_balance, delta=None)
+cols[2].metric(label="Bets Placed", value=num_bets, delta=None)
+cols[3].metric(label="Bets Won", value=num_wins, delta=None)
+cols[4].metric(label="Bets Lost", value=num_losses, delta=None)
+cols[5].metric(label="Average Odds", value=average_odds, delta=None)
