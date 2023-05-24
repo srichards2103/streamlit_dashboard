@@ -207,7 +207,7 @@ winning_bets = trades_evs.loc[trades_evs["return"] > 0].copy()
 # histogram of distribution of wins amongst bet_type
 
 figure = plt.figure(figsize=(15, 7))
-plt.hist(winning_bets["bet_type"], bins=20)
+plt.hist(winning_bets["race_type"], bins=20)
 plt.title("Distribution of Winning Bets by Bet Type")
 plt.xlabel("Bet Type")
 plt.ylabel("Frequency")
