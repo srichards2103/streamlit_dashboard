@@ -283,3 +283,28 @@ cols[2].metric(label="Bets Placed", value=num_bets, delta=None)
 cols[3].metric(label="Bets Won", value=num_wins, delta=None)
 cols[4].metric(label="Bets Lost", value=num_losses, delta=None)
 cols[5].metric(label="Average Odds", value=average_odds, delta=None)
+
+st.header("Last 24 Hours - no data cleaned (only SB information)")
+
+trades_p["timestamp"] = pd.to_datetime(trades_p["timestamp"])
+last_24 = trades_p.loc[trades_p["timestamp"] > now - datetime.timedelta(days=1)].copy()
+
+# Opening Balance
+opening_balance = last_24["balance"].iloc[0]
+
+# Closing Balance
+closing_balance = last_24["balance"].iloc[-1]
+
+# Bets placed
+num_bets = len(last_24)
+
+# Average Odds
+average_odds = round(last_24["win_odds"].astype(float).mean(), 3)
+
+# Display
+
+cols = st.columns(4)
+cols[0].metric(label="Opening Balance", value=opening_balance, delta=None)
+cols[1].metric(label="Closing Balance", value=closing_balance, delta=None)
+cols[2].metric(label="Bets Placed", value=num_bets, delta=None)
+cols[3].metric(label="Average Odds (SB)", value=average_odds, delta=None)
