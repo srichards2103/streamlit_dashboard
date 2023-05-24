@@ -129,7 +129,34 @@ trades_evs["clv"] = trades_evs["stake_size"].astype(float) * (
 # Calculate cumulative total of CLV
 trades_evs["cumulative_clv"] = trades_evs["clv"].cumsum()
 
-st.line_chart(trades_evs["cumulative_clv"])
+# st.line_chart(trades_evs["cumulative_clv"])
+
+# Calculate cumulative total of actual return
+trades_evs["cumulative_return"] = trades_evs["return"].cumsum()
+
+# Create a line chart
+plt.figure(figsize=(15, 7))
+plt.plot(trades_evs["timestamp"], trades_evs["cumulative_clv"], label="Cumulative CLV")
+plt.plot(
+    trades_evs["timestamp"],
+    trades_evs["cumulative_return"],
+    label="Cumulative Return",
+    color="orange",
+)
+
+# Fill the area under the lines
+plt.fill_between(trades_evs["timestamp"], trades_evs["cumulative_clv"], alpha=0.3)
+plt.fill_between(
+    trades_evs["timestamp"], trades_evs["cumulative_return"], alpha=0.3, color="orange"
+)
+
+plt.title("Cumulative Closing Line Value and Return Over Time")
+plt.ylabel("Cumulative Value")
+plt.xlabel("Date")
+plt.legend()
+
+# Display the chart in the Streamlit app
+st.pyplot(plt.gcf())
 
 ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 5)
 ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 5)
