@@ -206,7 +206,7 @@ winning_bets = trades_evs.loc[trades_evs["return"] > 0].copy()
 
 # histogram of distribution amonst event_type
 
-st.bar_chart(winning_bets["event_type"])
+st.bar_chart(winning_bets["race_type"])
 
 
 ## plot
