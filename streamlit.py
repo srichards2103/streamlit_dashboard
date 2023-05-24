@@ -137,6 +137,7 @@ trades_evs["profit"] = trades_evs["return"].astype(float) - trades_evs[
 ].astype(float)
 trades_evs["cumulative_return"] = trades_evs["profit"].cumsum()
 
+
 # Create a line chart
 plt.figure(figsize=(15, 7))
 plt.plot(trades_evs.index, trades_evs["cumulative_clv"], label="Cumulative CLV")
@@ -154,6 +155,37 @@ plt.fill_between(
 )
 
 plt.title("Cumulative Closing Line Value and Return Over Time")
+plt.ylabel("Cumulative Value")
+plt.xlabel("Index")
+plt.legend()
+# Display the chart in the Streamlit app
+st.pyplot(plt.gcf())
+trades_evs["expected_return_cumulative"] = trades_evs["expected_return"].cumsum()
+
+# Create a line chart
+plt.figure(figsize=(15, 7))
+plt.plot(
+    trades_evs.index,
+    trades_evs["expected_return_cumulative"],
+    label="Cumulative Expected Return",
+    color="green",
+)
+plt.plot(
+    trades_evs.index,
+    trades_evs["cumulative_return"],
+    label="Cumulative Return",
+    color="orange",
+)
+
+# Fill the area under the lines
+plt.fill_between(
+    trades_evs.index, trades_evs["expected_return_cumulative"], alpha=0.3, color="green"
+)
+plt.fill_between(
+    trades_evs.index, trades_evs["cumulative_return"], alpha=0.3, color="orange"
+)
+
+plt.title("Cumulative Expected Return and Return Over Time")
 plt.ylabel("Cumulative Value")
 plt.xlabel("Index")
 plt.legend()
@@ -198,21 +230,6 @@ cols[4].metric(
 # cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
 cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
 cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
-
-
-## Find all winning bets where return > 0
-
-winning_bets = trades_evs.loc[trades_evs["return"] > 0].copy()
-
-# histogram of distribution of wins amongst bet_type
-
-figure = plt.figure(figsize=(15, 7))
-plt.hist(winning_bets["race_type"], bins=20)
-plt.title("Distribution of Winning Bets by Bet Type")
-plt.xlabel("Bet Type")
-plt.ylabel("Frequency")
-plt.xticks(rotation=45)
-st.pyplot(figure)
 
 
 ## plot
