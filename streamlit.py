@@ -82,6 +82,13 @@ sns.distplot(missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
 
+# Total Trades Placed
+st.header("Total Trades Placed")
+
+st.metric = (
+    "Total Trades Placed",
+    trades_p.shape[0],
+)
 col4, col5, col6 = st.columns(3)
 
 ## Add EV for all orders placed within past 24 hours from now
