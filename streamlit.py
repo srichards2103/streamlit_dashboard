@@ -271,7 +271,8 @@ st.pyplot(plt.gcf())
 ## Find % of odds that have win odds smaller than second_to_best_lay_prices that have less than 1 ev
 
 small_win_odds = trades_evs[
-    trades_evs["win_odds"] < trades_evs["second_to_best_lay_prices"]
+    trades_evs["win_odds"].astype(float)
+    < trades_evs["second_to_best_lay_prices"].astype(float)
 ]
 ev_small = small_win_odds[small_win_odds["ev"] < 1]
 ev_large = small_win_odds[small_win_odds["ev"] > 1]
