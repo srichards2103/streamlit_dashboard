@@ -275,7 +275,7 @@ last_24["return"] = sum(last_24["return"].astype(float))
 average_odds = round(last_24["bsp"].astype(float).mean(), 3)
 
 # Display on Dashvoard
-st.header("Last 48 Hours")
+st.header("Last 48 Hours (Dependent on Cleaning of Data (around 5pm AEST))")
 cols = st.columns(6)
 cols[0].metric(label="Opening Balance", value=opening_balance, delta=None)
 cols[1].metric(label="Closing Balance", value=closing_balance, delta=None)
