@@ -244,10 +244,23 @@ cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
 # Select only numeric columns
 import numpy as np
 
-numeric_cols = trades_evs.select_dtypes(include=[np.number])
+# First identify the columns that can be converted to numeric
+cols = trades_evs.columns
+convert_cols = []
 
-# Compute pairwise correlation of columns, excluding NA/null values.
-corr_matrix = numeric_cols.corr()
+for col in cols:
+    # Try converting the column to numeric
+    try:
+        trades_evs[col] = pd.to_numeric(trades_evs[col])
+        convert_cols.append(col)
+    except ValueError:
+        # If an error occurs, then the column cannot be converted to numeric
+        pass
+
+print("Columns converted to numeric: ", convert_cols)
+
+# Now you can compute the correlation matrix on the entire DataFrame
+corr_matrix = trades_evs.corr()
 
 # Create a heatmap
 plt.figure(figsize=(10, 8))
