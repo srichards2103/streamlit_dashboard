@@ -175,8 +175,11 @@ average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
 cols = st.columns(7)
 
+# filter out duplicates of runners
+filtered_missed = missed_evs.drop_duplicates(subset=["runner_name"])
+
 percentage_missed = round(
-    len(missed_evs) / (len(missed_evs) + len(trades_evs)) * 100, 2
+    len(filtered_missed) / (len(filtered_missed) + len(trades_evs)) * 100, 2
 )
 cols[0].metric(
     label="Expected Profit (EV of Bets Placed)", value=ev_bets_placed, delta=None
