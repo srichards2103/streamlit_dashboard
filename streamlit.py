@@ -205,7 +205,7 @@ total_bets_placed = len(trades_p)
 # average_odds = round(trades_evs["win_odds"].astype(float).mean(), 3)
 average_bsp = round(trades_evs["bsp"].astype(float).mean(), 3)
 
-cols = st.columns(8)
+cols = st.columns(5)
 
 # filter out duplicates of runners
 
