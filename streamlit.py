@@ -228,9 +228,10 @@ cols[4].metric(
     label="All time Profit/Loss for Placed Bets", value=profit_loss_placed, delta=None
 )
 # cols[5].metric(label="Average Odds SB", value=average_odds, delta=None)
-cols[5].metric(label="Average Odds BSP", value=average_bsp, delta=None)
-cols[6].metric(label="Percentage Missed", value=percentage_missed, delta=None)
-cols[7].metric(label="Total Bets Placed", value=total_bets_placed, delta=None)
+cols_new = st.columns(3)
+cols_new[0].metric(label="Average Odds BSP", value=average_bsp, delta=None)
+cols_new[1].metric(label="Percentage Missed", value=percentage_missed, delta=None)
+cols_new[2].metric(label="Total Bets Placed", value=total_bets_placed, delta=None)
 
 
 ## plot
