@@ -76,11 +76,30 @@ missed_evs = missed_evs.drop_duplicates(subset=["market_id"])
 for index, row in missed_evs.iterrows():
     missed_evs.loc[index, "ev"] = float(row.win_odds) / float(row.bsp)
 
+
 figure = plt.figure(figsize=(10, 5))
 ## plot distplot but remove outliers
-sns.distplot(trades_evs["ev"], kde=False, rug=True)
-sns.distplot(missed_evs["ev"], kde=False, rug=True)
 
+
+def remove_outliers(df, column_name):
+    Q1 = df[column_name].quantile(0.25)
+    Q3 = df[column_name].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    filtered_df = df[
+        (df[column_name] >= lower_bound) & (df[column_name] <= upper_bound)
+    ]
+    return filtered_df
+
+
+# Remove outliers from 'ev' column in each DataFrame
+filtered_trades_evs = remove_outliers(trades_evs, "ev")
+filtered_missed_evs = remove_outliers(missed_evs, "ev")
+
+# Now you can plot the filtered data
+sns.distplot(filtered_trades_evs["ev"], label="Placed")
+sns.distplot(filtered_missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
 
