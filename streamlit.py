@@ -77,8 +77,10 @@ for index, row in missed_evs.iterrows():
     missed_evs.loc[index, "ev"] = float(row.win_odds) / float(row.bsp)
 
 figure = plt.figure(figsize=(10, 5))
-sns.distplot(trades_evs["ev"], label="Placed")
-sns.distplot(missed_evs["ev"], label="Missed")
+## plot distplot but remove outliers
+sns.distplot(trades_evs["ev"], kde=False, rug=True)
+sns.distplot(missed_evs["ev"], kde=False, rug=True)
+
 
 col3.pyplot(figure)
 
@@ -192,8 +194,8 @@ plt.legend()
 # Display the chart in the Streamlit app
 st.pyplot(plt.gcf())
 
-ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 5)
-ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 5)
+ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 3)
+ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 3)
 ev_all_time_placed = round(trades_evs["ev"].mean(), 3)
 ev_all_time_missed = round(missed_evs["ev"].mean(), 3)
 profit_loss_placed = round(
