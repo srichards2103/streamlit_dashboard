@@ -130,15 +130,16 @@ trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs
 total_waged = sum(trades_evs["stake_size"].astype(float))
 missed_evs["stake_size"] = 20
 
-missed_evs["expected_return"] = 1 / missed_evs["bsp"].astype(float) * missed_evs[
-    "win_odds"
-].astype(float) * missed_evs["stake_size"].astype(float) - (
-    1 - 1 / missed_evs["bsp"].astype(float)
-) * missed_evs[
-    "stake_size"
-].astype(
-    float
-)
+
+def calculate_expected_value(p_win, odds_win, p_loss, stake_size):
+    ev = (p_win * (odds_win - 1) - p_loss) * stake_size
+    return ev
+
+
+missed_evs["expected_return"] = (
+    1 / missed_evs["bsp"].astype(float) * (missed_evs["win_odds"].astype(float) - 1)
+    - (1 - 1 / missed_evs["bsp"].astype(float))
+) * missed_evs["stake_size"].astype(float)
 
 
 # Closing Line
