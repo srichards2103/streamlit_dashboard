@@ -97,6 +97,7 @@ def remove_outliers(df, column_name):
 filtered_trades_evs = remove_outliers(trades_evs, "ev")
 filtered_missed_evs = remove_outliers(missed_evs, "ev")
 
+
 # Now you can plot the filtered data
 sns.distplot(filtered_trades_evs["ev"], label="Placed")
 sns.distplot(filtered_missed_evs["ev"], label="Missed")
@@ -217,7 +218,7 @@ st.pyplot(plt.gcf())
 ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 3)
 ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 3)
 ev_all_time_placed = round(trades_evs["ev"].mean(), 3)
-ev_all_time_missed = round(missed_evs["ev"].mean(), 3)
+ev_all_time_missed = round(filtered_missed_evs["ev"].mean(), 3)
 profit_loss_placed = round(
     sum(trades_evs["return"].astype(float))
     - sum(trades_evs["stake_size"].astype(float)),
