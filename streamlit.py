@@ -117,9 +117,9 @@ last_24["EV"] = last_24["win_odds"] / last_24["best_lay_price"]
 # last_24["actual_ev"] = last_24["win_odds"] / last_24["bsp"]
 day_evmean = round(last_24["EV"].mean(), 3)
 
-trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * trades_evs[
-    "win_odds"
-].astype(float) * trades_evs["stake_size"].astype(float) - (
+trades_evs["expected_return"] = 1 / trades_evs["bsp"].astype(float) * (
+    trades_evs["win_odds"].astype(float) - 1
+) * trades_evs["stake_size"].astype(float) - (
     1 - 1 / trades_evs["bsp"].astype(float)
 ) * trades_evs[
     "stake_size"
@@ -219,6 +219,7 @@ ev_bets_placed = round(sum(trades_evs["expected_return"].astype(float)), 3)
 ev_missed_bets = round(sum(missed_evs["expected_return"].astype(float)), 3)
 ev_all_time_placed = round(trades_evs["ev"].mean(), 3)
 ev_all_time_missed = round(filtered_missed_evs["ev"].mean(), 3)
+
 profit_loss_placed = round(
     sum(trades_evs["return"].astype(float))
     - sum(trades_evs["stake_size"].astype(float)),
