@@ -104,6 +104,18 @@ sns.distplot(filtered_missed_evs["ev"], label="Missed")
 
 col3.pyplot(figure)
 
+# See what EV is when removing bets where second_best_lay_price/best_lay_price > 1.05
+filter = trades_evs[
+    trades_evs["second_best_lay_price"].astype(float)
+    / trades_evs["best_lay_price"].astype(float)
+    < 1.05
+]
+mean_ev = filter["ev"].mean()
+column = st.columns(2)
+column[0].header("Mean EV")
+column[0].write(mean_ev)
+column[1].header("num")
+column[1].write(len(trades_evs))
 
 ## Add EV for all orders placed within past 24 hours from now
 now = datetime.datetime.utcnow()
