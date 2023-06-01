@@ -106,7 +106,7 @@ col3.pyplot(figure)
 
 # See what EV is when removing bets where second_best_lay_price/best_lay_price > 1.05
 filter = trades_evs[
-    trades_evs["second_best_lay_price"].astype(float)
+    trades_evs["second_to_best_lay_prices"].astype(float)
     / trades_evs["best_lay_price"].astype(float)
     < 1.05
 ]
