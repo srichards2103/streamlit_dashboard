@@ -23,22 +23,33 @@ client = MongoClient(MONGO_URL)
 db = client.BettingData
 collection = db.Trades
 
-# Fetch data from MongoDB
+## Fetch data from MongoDB
 data = collection.find()
 data = pd.DataFrame(list(data))
 
-# Get unique usernames from MongoDB
-usernames = data['username'].unique()
+# Get unique bookies from MongoDB
+bookies = data['bookie'].unique()
+
+# Add a dropdown menu for selecting a bookie
+selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
+
+# Filter your data based on the selected bookie
+data_bookie = data[data['bookie'] == selected_bookie]
+
+# Get unique usernames from the selected bookie
+usernames = data_bookie['username'].unique()
 
 # Add a dropdown menu for selecting a username
 selected_username = st.sidebar.selectbox("Select Username", usernames)
 
 # Filter your data based on the selected username
-data = data[data['username'] == selected_username]
+data_filtered = data_bookie[data_bookie['username'] == selected_username]
 
 # Get placed trades and not placed trades
-trades_p = data[data["placed"] == "placed"]
-trades_np = data[data["placed"] != "placed"]
+trades_p = data_filtered[data_filtered["placed"] == "placed"]
+trades_np = data_filtered[data_filtered["placed"] != "placed"]
+...
+
 
 # Creating a three column layout
 col1, col2, col3 = st.columns(3)
