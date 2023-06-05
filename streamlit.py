@@ -5,11 +5,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import datetime
 
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
@@ -17,27 +12,20 @@ with open("style.css") as f:
 
 st.sidebar.header("Dashboard `version 2`")
 
-st.sidebar.subheader("Heat map parameter")
-time_hist_color = st.sidebar.selectbox("Color by", ("temp_min", "temp_max"))
+st.sidebar.subheader("User Selection")
+selected_username = st.sidebar.selectbox("Select a User", ["username1", "username2", "username3"])
 
-st.sidebar.subheader("Donut chart parameter")
-donut_theta = st.sidebar.selectbox("Select data", ("q2", "q3"))
-
-st.sidebar.subheader("Line chart parameters")
-plot_data = st.sidebar.multiselect(
-    "Select data", ["temp_min", "temp_max"], ["temp_min", "temp_max"]
-)
-plot_height = st.sidebar.slider("Specify plot height", 200, 500, 250)
+# ... rest of your sidebar settings ...
 
 # Connect to MongoDB
-
 MONGO_URL = st.secrets["MONGO_URL"]
 client = MongoClient(MONGO_URL)
 db = client.BettingData
 collection = db.Trades
 
 # Fetch data from MongoDB
-data = collection.find()
+# Filter data based on selected username
+data = collection.find({"username": selected_username})
 data = pd.DataFrame(list(data))
 
 # Get placed trades and not placed trades
