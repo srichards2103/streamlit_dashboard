@@ -12,8 +12,6 @@ with open("style.css") as f:
 
 st.sidebar.header("Dashboard `version 2`")
 
-st.sidebar.subheader("User Selection")
-selected_username = st.sidebar.selectbox("Select a User", ["username1", "username2", "username3"])
 
 # ... rest of your sidebar settings ...
 
