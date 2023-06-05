@@ -24,9 +24,17 @@ db = client.BettingData
 collection = db.Trades
 
 # Fetch data from MongoDB
-# Filter data based on selected username
-data = collection.find({"username": selected_username})
+data = collection.find()
 data = pd.DataFrame(list(data))
+
+# Get unique usernames from MongoDB
+usernames = data['username'].unique()
+
+# Add a dropdown menu for selecting a username
+selected_username = st.sidebar.selectbox("Select Username", usernames)
+
+# Filter your data based on the selected username
+data = data[data['username'] == selected_username]
 
 # Get placed trades and not placed trades
 trades_p = data[data["placed"] == "placed"]
