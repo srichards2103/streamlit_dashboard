@@ -38,6 +38,7 @@ def get_usernames_and_bookies(data):
     return usernames, bookies
 
 def plot_total_profit_loss(trades):
+
     trades["clv"] = trades["stake_size"] * (trades["win_odds"]/trades["bsp"] - 1)
     trades["cumulative_clv"] = trades["clv"].cumsum()
     trades["cumulative_profit"] =(trades["return"] - trades["stake_size"]).cumsum()
