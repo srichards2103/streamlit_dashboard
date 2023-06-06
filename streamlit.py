@@ -33,8 +33,8 @@ selected_username = st.sidebar.selectbox("Select Username", usernames)
 trades_p, trades_np = fetch_data(data, selected_bookie, selected_username)
 
 # Get dataframe with cleaned bsp's
-trades_evs = trades_p[trades_p["bsp"] != 0.0 or trades_p["bsp"].notnull()]
-missed_evs = trades_np[trades_np["bsp"] != 0.0 or trades_np["bsp"].notnull()]
+trades_evs = trades_p[(trades_p["bsp"] != 0.0) | (trades_p["bsp"].notnull())]
+missed_evs = trades_np[(trades_np["bsp"] != 0.0) | (trades_np["bsp"].notnull())]
 
 
 ## HOME PAGE
