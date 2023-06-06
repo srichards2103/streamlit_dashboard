@@ -12,7 +12,6 @@ with open("style.css") as f:
 
 st.sidebar.header("Dashboard `version 2`")
 
-
 # ... rest of your sidebar settings ...
 
 # Connect to MongoDB
@@ -25,28 +24,32 @@ collection = db.Trades
 data = collection.find()
 data = pd.DataFrame(list(data))
 
-# Get unique bookies from MongoDB
+# Get unique bookies from MongoDB and add 'All' option
 bookies = data['bookie'].unique()
+bookies = np.insert(bookies, 0, "All")
 
 # Add a dropdown menu for selecting a bookie
 selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
 
 # Filter your data based on the selected bookie
-data_bookie = data[data['bookie'] == selected_bookie]
+if selected_bookie != "All":
+    data = data[data['bookie'] == selected_bookie]
 
-# Get unique usernames from the selected bookie
-usernames = data_bookie['username'].unique()
+# Get unique usernames from the selected bookie and add 'All' option
+usernames = data['username'].unique()
+usernames = np.insert(usernames, 0, "All")
 
 # Add a dropdown menu for selecting a username
 selected_username = st.sidebar.selectbox("Select Username", usernames)
 
 # Filter your data based on the selected username
-data_filtered = data_bookie[data_bookie['username'] == selected_username]
+if selected_username != "All":
+    data = data[data['username'] == selected_username]
 
 # Get placed trades and not placed trades
-trades_p = data_filtered[data_filtered["placed"] == "placed"]
-trades_np = data_filtered[data_filtered["placed"] != "placed"]
-...
+trades_p = data[data["placed"] == "placed"]
+trades_np = data[data["placed"] != "placed"]
+
 
 
 # Creating a three column layout
