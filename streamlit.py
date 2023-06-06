@@ -64,8 +64,6 @@ else:
     selected_username = st.sidebar.selectbox("Select Username", usernames)
 
     trades_p, trades_np = fetch_data(trades, selected_bookie, selected_username)
-    trades_p = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
-    trades_np = trades_np[(trades_np["bsp"]!= 0.0) & (trades_np["bsp"].notnull())]
 
     # Balance Histogram of EV and 10 Most Recent Trades
     col1, col2, col3 = st.columns(3)
@@ -76,13 +74,16 @@ else:
 
     # Histogram of EV
     col2.header(f"EV for {selected_bookie} - {selected_username}")
-    trades_p = calculate_ev(trades_p)
-    trades_np = calculate_ev(trades_np)
+    placed_evs = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
+    np_evs = trades_np[(trades_np["bsp"]!= 0.0) & (trades_np["bsp"].notnull())]
+
+    placed_evs = calculate_ev(placed_evs)
+    np_evs = calculate_ev(np_evs)
 
     # plot with seaborn distplot
     figure = plt.figure(figsize=(10, 5))
-    sns.distplot(trades_p["ev"], label="placed")
-    sns.distplot(trades_np["ev"], label="not placed")
+    sns.distplot(placed_evs["ev"], label="placed")
+    sns.distplot(np_evs["ev"], label="not placed")
     plt.legend()
     col2.pyplot(figure)
 
