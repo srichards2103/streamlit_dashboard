@@ -47,18 +47,20 @@ if selected_page == "Home":
 ## Backtesting Page - Test the model on historical data
 elif selected_page == "Backtest":
     st.header("Backtest")
+    options = ["Option 1", "Option 2", "Option 3"]
 
     # Parameters to tweak
     if 'param1' not in st.session_state:
         st.session_state['param1'] = 0
     if 'param2' not in st.session_state:
         st.session_state['param2'] = 0
-    if 'param3' not in st.session_state:
-        st.session_state['param3'] = "Option 1"
+    if 'param3' not in st.session_state or st.session_state['param3'] not in options:
+        st.session_state['param3'] = "Option 1"  # default value
+
 
     st.session_state['param1'] = st.slider("Parameter 1", 0, 100, st.session_state['param1'])
     st.session_state['param2'] = st.slider("Parameter 2", 0, 100, st.session_state['param2'])
-    st.session_state['param3'] = st.selectbox("Parameter 3", ["Option 1", "Option 2", "Option 3"], st.session_state['param3'])
+    st.session_state['param3'] = st.selectbox("Parameter 3", options, st.session_state['param3'])
 
     # Start backtest button
     start_backtest = st.button("Start Backtest")
