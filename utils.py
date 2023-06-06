@@ -48,7 +48,7 @@ def plot_total_profit_loss(trades):
     ax.plot(trades.index, trades["cumulative_clv"], color="orange")
     ax.fill_between(trades.index, trades["cumulative_clv"], color="orange", alpha=0.3)
     # ax.plot(trades.index, trades["cumulative_profit"], color="blue")
-    # ax.fill_between(trades.index, trades["cumulative_profit"], color="blue", alpha=0.3)
+    ax.fill_between(trades.index, trades["cumulative_profit"], color="blue", alpha=0.3)
     ax.set_title("Cumulative CLV vs Cumulative Profit")
     ax.set_xlabel("Trade Number")
 
