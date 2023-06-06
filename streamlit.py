@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import datetime
 import numpy as np
-
+from utils import *
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
@@ -25,32 +25,27 @@ collection = db.Trades
 data = collection.find()
 data = pd.DataFrame(list(data))
 
-# Get unique bookies from MongoDB and add 'All' option
-bookies = data['bookie'].unique().tolist()
-bookies = np.insert(bookies, 0, "All")
+usernames, bookies = get_usernames_and_bookies(data)
 
-# Add a dropdown menu for selecting a bookie
 selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
-
-# Filter your data based on the selected bookie
-if selected_bookie != "All":
-    data = data[data['bookie'] == selected_bookie]
-
-# Get unique usernames from the selected bookie and add 'All' option
-usernames = data['username'].unique().tolist()
-usernames = np.insert(usernames, 0, "All")
-
-# Add a dropdown menu for selecting a username
 selected_username = st.sidebar.selectbox("Select Username", usernames)
 
-# Filter your data based on the selected username
-if selected_username != "All":
-    data = data[data['username'] == selected_username]
+trades_p, trades_np = fetch_data(data, selected_bookie, selected_username)
 
-# Get placed trades and not placed trades
-trades_p = data[data["placed"] == "placed"]
-trades_np = data[data["placed"] != "placed"]
+# Get dataframe with cleaned bsp's
+trades_evs = trades_p[trades_p["bsp"] != 0.0 or trades_p["bsp"].notnull()]
+missed_evs = trades_np[trades_np["bsp"] != 0.0 or trades_np["bsp"].notnull()]
 
+
+## HOME PAGE
+
+if selected_bookie == "All" and selected_username == "All":
+    col1, col2 = st.columns(2)
+    col1.metric("Total Profit", f"{calculate_total_profit(trades_p):.2f}")
+    
+    # Cumulative return figure
+    figure, trades_p = cumulative_profit_figure(trades_p)
+    col2.pyplot(figure)
 
 
 # Creating a three column layout
