@@ -33,8 +33,11 @@ def fetch_data(data, bookie, username):
 def get_usernames_and_bookies(data):
     usernames = data["username"].unique()
     usernames = np.append(usernames, "All")
+    usernames = usernames.remove("nan")
+
     bookies = data["bookie"].unique()
     bookies = np.append(bookies, "All")
+    bookies = bookies.remove("nan")
     return usernames, bookies
 
 def plot_total_profit_loss(trades):
@@ -53,3 +56,14 @@ def plot_total_profit_loss(trades):
     ax.set_xlabel("Trade Number")
 
     return fig, trades
+
+def plot_balance(trades):
+    fig, ax = plt.subplots(figsize=(20, 10))
+    ax.plot(trades.index, trades["balance"], color="orange")
+    ax.set_title("Balance")
+    ax.set_xlabel("Trade Number")
+    return fig
+
+def calculate_ev(trades):
+    trades["ev"] = trades["win_odds"] / trades["bsp"]
+    return trades

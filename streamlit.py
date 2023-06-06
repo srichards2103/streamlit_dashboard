@@ -53,6 +53,32 @@ else:
     selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
     selected_username = st.sidebar.selectbox("Select Username", usernames)
     trades_p, trades_np = fetch_data(trades, selected_bookie, selected_username)
+    trades_p = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
+    trades_np = trades_np[(trades_np["bsp"]!= 0.0) & (trades_np["bsp"].notnull())]
+    # Balance Histogram of EV and 10 Most Recent Trades
+    col1, col2, col3 = st.columns(3)
+    col1.header(f"Balance for {selected_bookie} - {selected_username}")
+
+    figure = plot_balance(trades_p)
+    col1.pyplot(figure)
+
+    # Histogram of EV
+    col2.header(f"EV for {selected_bookie} - {selected_username}")
+    trades_p = calculate_ev(trades_p)
+    trades_np = calculate_ev(trades_np)
+
+    # plot with seaborn distplot
+    figure = plt.figure(figsize=(10, 5))
+    sns.distplot(trades_p["ev"], label="placed")
+    sns.distplot(trades_np["ev"], label="not placed")
+    plt.legend()
+    col2.pyplot(figure)
+
+    # 10 Most Recent Trades
+    col3.header(f"10 Most Recent Trades for {selected_bookie} - {selected_username}")
+    recent = trades_p.tail(10)
+    col3.table(recent[["win_odds", "best_lay_price", "balance", "stake_size"]])
+
 
 
 ## Look at Specific Accounts
