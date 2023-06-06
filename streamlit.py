@@ -34,10 +34,10 @@ if selected_page == "Home":
     # Total profit loss graph
     # Filter out null bsp and zero bsp
     # Ensure the columns are numeric and replace any infinities or NaNs with 0
-    trades["stake_size"] = pd.to_numeric(trades["stake_size"], errors='coerce').replace([np.inf, -np.inf], np.nan).fillna(0)
-    trades["win_odds"] = pd.to_numeric(trades["win_odds"], errors='coerce').replace([np.inf, -np.inf], np.nan).fillna(0)
-    trades["bsp"] = pd.to_numeric(trades["bsp"], errors='coerce').replace([np.inf, -np.inf], np.nan).fillna(0)
-    trades["return"] = pd.to_numeric(trades["return"], errors='coerce').replace([np.inf, -np.inf], np.nan).fillna(0)
+    trades["stake_size"] = pd.to_numeric(trades["stake_size"])
+    trades["win_odds"] = pd.to_numeric(trades["win_odds"])
+    # trades["bsp"] = pd.to_numeric(trades["bsp"])
+    trades["return"] = pd.to_numeric(trades["return"])
 
     trades = trades[(trades["bsp"].notnull()) | (trades["bsp"] != 0)]
     figure, trades = plot_total_profit_loss(trades)
