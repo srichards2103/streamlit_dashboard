@@ -33,11 +33,11 @@ def fetch_data(data, bookie, username):
 def get_usernames_and_bookies(data):
     usernames = data["username"].unique()
     usernames = np.append(usernames, "All")
-    usernames = usernames.remove("nan")
+    usernames = usernames[usernames != "nan"]
 
     bookies = data["bookie"].unique()
     bookies = np.append(bookies, "All")
-    bookies = bookies.remove("nan")
+    bookies = bookies[bookies != "nan"]
     return usernames, bookies
 
 def plot_total_profit_loss(trades):
