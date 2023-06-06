@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import datetime
+import numpy as np
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
@@ -25,7 +26,7 @@ data = collection.find()
 data = pd.DataFrame(list(data))
 
 # Get unique bookies from MongoDB and add 'All' option
-bookies = data['bookie'].unique()
+bookies = data['bookie'].unique().tolist()
 bookies = np.insert(bookies, 0, "All")
 
 # Add a dropdown menu for selecting a bookie
@@ -36,7 +37,7 @@ if selected_bookie != "All":
     data = data[data['bookie'] == selected_bookie]
 
 # Get unique usernames from the selected bookie and add 'All' option
-usernames = data['username'].unique()
+usernames = data['username'].unique().tolist()
 usernames = np.insert(usernames, 0, "All")
 
 # Add a dropdown menu for selecting a username
