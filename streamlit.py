@@ -119,6 +119,10 @@ else:
     recent = trades_p.tail(10)
     col3.table(recent[["win_odds", "best_lay_price", "balance", "stake_size"]])
 
-
+    # Metrics
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Mean EV", round(placed_evs["ev"].mean(), 4))
+    col2.metric("Bets Placed", len(placed_evs))
+    col3.metric("Mean BSP", round(placed_evs["bsp"].mean(), 4))
 
 ## Look at Specific Accounts
