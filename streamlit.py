@@ -40,7 +40,7 @@ if selected_page == "Home":
     trades["return"] = pd.to_numeric(trades["return"])
     
     trades_p, trades_np = prepare_data(trades)
-    trades_p = trades_p[(trades_p["bsp"]!= 0.0) | (trades_p["bsp"].notnull())]
+    trades_p = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
 
