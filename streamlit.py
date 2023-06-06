@@ -46,8 +46,31 @@ if selected_page == "Home":
 
 ## Backtesting Page - Test the model on historical data
 elif selected_page == "Backtest":
-    col1 = st.columns(1)
-    col1.header("Backtest")
+    st.header("Backtest")
+
+    # Parameters to tweak
+    param1 = st.slider("Parameter 1", 0, 100)
+    param2 = st.slider("Parameter 2", 0, 100)
+    param3 = st.selectbox("Parameter 3", ["Option 1", "Option 2", "Option 3"])
+
+    # Start backtest button
+    start_backtest = st.button("Start Backtest")
+
+    if start_backtest:
+        # Define the function for backtesting
+        def backtest(param1, param2, param3):
+            # Insert your backtest code here, which will make use of the parameters
+            # For now, let's just print them
+            st.write(f"Backtest started with parameters: {param1}, {param2}, {param3}")
+
+        # Call the backtest function with the parameters
+        backtest(param1, param2, param3)
+
+        # Insert code to produce plots and metrics after the backtest
+        # For now, let's just print a success message
+        st.write("Backtest complete, producing plots and metrics.")
+
+
 else: 
     # Get all the bookies excluding None entries
     bookies = trades[trades["bookie"].notnull()]["bookie"].unique().tolist()
@@ -70,7 +93,7 @@ else:
     col1.header(f"Balance for {selected_bookie} - {selected_username}")
 
     figure = plot_balance(trades_p)
-    
+
     col1.pyplot(figure)
 
     # Histogram of EV
