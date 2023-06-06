@@ -47,23 +47,27 @@ if selected_page == "Home":
 ## Backtesting Page - Test the model on historical data
 elif selected_page == "Backtest":
     st.header("Backtest")
-    with st.form(key='backtest_form'):
-        param1 = st.number_input("Parameter 1", value=0.0, step=0.01)
-        param2 = st.number_input("Parameter 2", value=0.0, step=0.01)
-        param3 = st.number_input("Parameter 3", value=0.0, step=0.01)
+    # Define a default function to be shown to the user
+    default_function = """
+    def user_function():
+        # Write your function logic here
+        st.write("This is a user-defined function.")
+    """
 
+    with st.form(key='backtest_form'):
+        user_code = st.text_area("Define your function here:", value=default_function)
         submit_button = st.form_submit_button(label='Start Backtest')
 
     if submit_button:
+        # Execute the user-defined code
+        exec(user_code, globals())
 
-        # Define the function for backtesting
-        def backtest(param1, param2, param3):
-            # Insert your backtest code here, which will make use of the parameters
-            # For now, let's just print them
-            st.write(f"Backtest started with parameters: {param1}, {param2}, {param3}")
+        # Call the user-defined function in the backtest
+        def backtest(user_function):
+            # Here we assume the user has defined a function called 'user_function'
+            user_function()
 
-        # Call the backtest function with the parameters
-        backtest(st.session_state['param1'], st.session_state['param2'], st.session_state['param3'])
+        backtest(user_function)
 
         # Insert code to produce plots and metrics after the backtest
         # For now, let's just print a success message
