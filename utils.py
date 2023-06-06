@@ -62,6 +62,7 @@ def plot_balance(trades):
     ax.plot(trades.index, trades["balance"], color="orange")
     ax.set_title("Balance")
     ax.set_xlabel("Trade Number")
+    ax.set_ylim(bottom=0)
     return fig
 
 def calculate_ev(trades):

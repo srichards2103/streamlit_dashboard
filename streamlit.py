@@ -70,6 +70,7 @@ else:
     col1.header(f"Balance for {selected_bookie} - {selected_username}")
 
     figure = plot_balance(trades_p)
+    
     col1.pyplot(figure)
 
     # Histogram of EV
