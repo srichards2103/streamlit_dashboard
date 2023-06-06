@@ -27,17 +27,15 @@ trades = pd.DataFrame(list(trades))
 historic_data = historic_data.find()
 historic_data = pd.DataFrame(list(historic_data))
 
-selected_page = st.sidebar.selectbox("Select Page", ["Home", "Backtest"])
+selected_page = st.sidebar.selectbox("Select Page", ["Home", "Backtest", "Specific Account"])
 
 ## HOME PAGE - overview of total profit/loss and cumulative return
 if selected_page == "Home":
-
-    col1, col2 = st.columns(2)
-    col1.metric("Total Profit", f"{calculate_total_profit(historic_data):.2f}")
-    
-    # Cumulative return figure
-    figure, trades_p = cumulative_profit_figure(historic_data)
-    col2.pyplot(figure)
+    # Total profit loss graph
+    # Filter out null bsp and zero bsp
+    trades = trades[(trades["bsp"].notnull()) | (trades["bsp"] != 0)]
+    figure, trades = plot_total_profit_loss(trades)
+    st.pyplot(figure)
 
 ## Backtesting Page - Test the model on historical data
 elif selected_page == "Backtest":

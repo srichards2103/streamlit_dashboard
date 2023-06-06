@@ -4,16 +4,6 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-def connect_to_mongodb(mongo_url):
-    client = MongoClient(mongo_url)
-    db = client.BettingData
-    collection = db.Trades
-    return collection
-
-def fetch_data(collection):
-    data = collection.find()
-    data = pd.DataFrame(list(data))
-    return data
 
 def filter_data_by_bookie(data, bookie):
     if bookie != "All":
@@ -47,46 +37,18 @@ def get_usernames_and_bookies(data):
     bookies = np.append(bookies, "All")
     return usernames, bookies
 
-def calculate_ev(trades_p):
-    trades_p["ev"] = trades_p.apply(
-        lambda row: calculate_expected_value(
-            row["p_win"], row["win_odds"], row["p_loss"], row["stake_size"]
-        ),
-        axis=1,
-    )
-    return trades_p
-
-def calculate_total_profit(trades_p):
-    total_profit = trades_p["return"].sum() - trades_p["stake_size"].sum()
-    return total_profit
-
-def cumulative_profit_figure(trades):
-    trades["clv"] = trades["stake_size"].astype(float) * (
-        trades["win_odds"].astype(float) / trades["bsp"].astype(float) - 1
-    )
+def plot_total_profit_loss(trades):
+    trades["clv"] = trades["stake_size"] * (trades["win_odds"]/trades["bsp"] - 1)
     trades["cumulative_clv"] = trades["clv"].cumsum()
-    # Calculate cumulative total of actual return
-    trades["profit"] = trades["return"].astype(float) - trades[
-        "stake_size"
-    ].astype(float)
-    trades["cumulative_return"] = trades["profit"].cumsum()
-    
-    figure = plt.figure(figsize=(15, 7))
-    plt.plot(trades.index, trades["cumulative_clv"], label="Cumulative CLV")
-    plt.plot(
-        trades.index,
-        trades["cumulative_return"],
-        label="Cumulative Return",
-        color="orange",
-    )
-    # Fill the area under the lines
-    plt.fill_between(trades.index, trades["cumulative_clv"], alpha=0.3)
-    plt.fill_between(
-        trades.index, trades["cumulative_return"], alpha=0.3, color="orange"
-    )
+    trades["cumulative_profit"] =(trades["return"] - trades["stake_size"]).cumsum()
 
-    plt.title("Cumulative Closing Line Value and Return Over Time")
-    plt.ylabel("Cumulative Value")
-    plt.xlabel("Index")
-    plt.legend()
-    return figure, trades
+    # Plot both, one filled with orange, one with blue, along index
+    fig, ax = plt.subplots(figsize=(20, 10))
+    ax.plot(trades["cumulative_clv"], color="orange")
+    ax.fill_between(trades.index, trades["cumulative_clv"], color="orange")
+    ax.plot(trades["cumulative_profit"], color="blue")
+    ax.fill_between(trades.index, trades["cumulative_profit"], color="blue")
+    ax.set_title("Cumulative CLV vs Cumulative Profit")
+    ax.set_xlabel("Trade Number")
+
+    return fig, trades
