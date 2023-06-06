@@ -49,12 +49,24 @@ elif selected_page == "Backtest":
     col1 = st.columns(1)
     col1.header("Backtest")
 else: 
-    usernames, bookies = get_usernames_and_bookies(trades)
+    # Get all the bookies excluding None entries
+    bookies = trades[trades["bookie"].notnull()]["bookie"].unique().tolist()
+    bookies.append("All")
+
     selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
+    
+    if selected_bookie != "All":
+        usernames = trades[trades["bookie"] == selected_bookie]["username"].unique().tolist()
+    else:
+        usernames = trades["username"].unique().tolist()
+    usernames.append("All")
+
     selected_username = st.sidebar.selectbox("Select Username", usernames)
+
     trades_p, trades_np = fetch_data(trades, selected_bookie, selected_username)
     trades_p = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
     trades_np = trades_np[(trades_np["bsp"]!= 0.0) & (trades_np["bsp"].notnull())]
+
     # Balance Histogram of EV and 10 Most Recent Trades
     col1, col2, col3 = st.columns(3)
     col1.header(f"Balance for {selected_bookie} - {selected_username}")
