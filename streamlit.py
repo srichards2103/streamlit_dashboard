@@ -49,9 +49,16 @@ elif selected_page == "Backtest":
     st.header("Backtest")
 
     # Parameters to tweak
-    param1 = st.slider("Parameter 1", 0, 100)
-    param2 = st.slider("Parameter 2", 0, 100)
-    param3 = st.selectbox("Parameter 3", ["Option 1", "Option 2", "Option 3"])
+    if 'param1' not in st.session_state:
+        st.session_state['param1'] = 0
+    if 'param2' not in st.session_state:
+        st.session_state['param2'] = 0
+    if 'param3' not in st.session_state:
+        st.session_state['param3'] = "Option 1"
+
+    st.session_state['param1'] = st.slider("Parameter 1", 0, 100, st.session_state['param1'])
+    st.session_state['param2'] = st.slider("Parameter 2", 0, 100, st.session_state['param2'])
+    st.session_state['param3'] = st.selectbox("Parameter 3", ["Option 1", "Option 2", "Option 3"], st.session_state['param3'])
 
     # Start backtest button
     start_backtest = st.button("Start Backtest")
@@ -64,7 +71,7 @@ elif selected_page == "Backtest":
             st.write(f"Backtest started with parameters: {param1}, {param2}, {param3}")
 
         # Call the backtest function with the parameters
-        backtest(param1, param2, param3)
+        backtest(st.session_state['param1'], st.session_state['param2'], st.session_state['param3'])
 
         # Insert code to produce plots and metrics after the backtest
         # For now, let's just print a success message
