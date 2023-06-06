@@ -48,11 +48,12 @@ if selected_page == "Home":
 elif selected_page == "Backtest":
     st.header("Backtest")
     with st.form(key='backtest_form'):
-        param1 = st.selectbox("Parameter 1", ["Option 1", "Option 2", "Option 3"])
-        param2 = st.selectbox("Parameter 2", ["Option 1", "Option 2", "Option 3"])
-        param3 = st.selectbox("Parameter 3", ["Option 1", "Option 2", "Option 3"])
+        param1 = st.number_input("Parameter 1", value=0.0, step=0.01)
+        param2 = st.number_input("Parameter 2", value=0.0, step=0.01)
+        param3 = st.number_input("Parameter 3", value=0.0, step=0.01)
 
-    submit_button = st.form_submit_button(label='Start Backtest')
+        submit_button = st.form_submit_button(label='Start Backtest')
+
     if submit_button:
 
         # Define the function for backtesting
