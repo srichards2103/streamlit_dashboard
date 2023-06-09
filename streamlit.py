@@ -28,8 +28,9 @@ def load_data():
     client = MongoClient(MONGO_URL)
     db = client.BettingData
     trades_collection = db.Trades
-    trades = trades_collection.find()
-    return pd.DataFrame(list(trades))
+    trades_cursor = trades_collection.find()
+    trades_data = pd.DataFrame(list(trades_cursor))
+    return trades_data
 
 trades = load_data()
 
