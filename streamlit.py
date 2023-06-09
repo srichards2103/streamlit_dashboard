@@ -20,12 +20,12 @@ MONGO_URL = st.secrets["MONGO_URL"]
 client = MongoClient(MONGO_URL)
 db = client.BettingData
 trades = db.Trades
-historic_data = db.HistoricData
+# historic_data = db.HistoricData
 ## Fetch data from MongoDB
 trades = trades.find()
 trades = pd.DataFrame(list(trades))
-historic_data = historic_data.find()
-historic_data = pd.DataFrame(list(historic_data))
+# historic_data = historic_data.find()
+# historic_data = pd.DataFrame(list(historic_data))
 
 selected_page = st.sidebar.selectbox("Select Page", ["Home", "Backtest", "Specific Account"])
 
