@@ -16,24 +16,21 @@ st.sidebar.header("Dashboard `version 2`")
 # ... rest of your sidebar settings ...
 
 # Connect to MongoDB
-MONGO_URL = st.secrets["MONGO_URL"]
-client = MongoClient(MONGO_URL)
-db = client.BettingData
-trades = db.Trades
-# historic_data = db.HistoricData
-## Fetch data from MongoDB
-@st.cache(allow_output_mutation=True)
-def load_data():
+def get_db():
     MONGO_URL = st.secrets["MONGO_URL"]
     client = MongoClient(MONGO_URL)
-    db = client.BettingData
+    return client.BettingData
+
+@st.cache(allow_output_mutation=True)
+def load_data(db):
     trades_collection = db.Trades
     trades_cursor = trades_collection.find()
     trades_data = pd.DataFrame(list(trades_cursor))
     return trades_data
 
-trades = load_data()
-
+# use it like this
+db = get_db()
+trades = load_data(db)
 # historic_data = historic_data.find()
 # historic_data = pd.DataFrame(list(historic_data))
 
