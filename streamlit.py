@@ -22,8 +22,17 @@ db = client.BettingData
 trades = db.Trades
 # historic_data = db.HistoricData
 ## Fetch data from MongoDB
-trades = trades.find()
-trades = pd.DataFrame(list(trades))
+@st.cache(allow_output_mutation=True)
+def load_data():
+    MONGO_URL = st.secrets["MONGO_URL"]
+    client = MongoClient(MONGO_URL)
+    db = client.BettingData
+    trades_collection = db.Trades
+    trades = trades_collection.find()
+    return pd.DataFrame(list(trades))
+
+trades = load_data()
+
 # historic_data = historic_data.find()
 # historic_data = pd.DataFrame(list(historic_data))
 
