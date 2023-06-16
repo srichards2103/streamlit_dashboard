@@ -122,7 +122,7 @@ else:
     # Metrics
     col1, col2, col3 = st.columns(3)
     col1.metric("Mean EV", round(placed_evs["ev"].mean(), 4))
-    col2.metric("Bets Placed", len(placed_evs))
+    col2.metric("Bets Placed", len(trades_p))
     col3.metric("Mean BSP", round(placed_evs["bsp"].mean(), 4))
 
 ## Look at Specific Accounts
