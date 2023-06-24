@@ -120,9 +120,9 @@ else:
     col3.table(recent[["win_odds", "best_lay_price", "balance", "stake_size"]])
 
     # Metrics
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     col1.metric("Mean EV", round(placed_evs["ev"].mean(), 4))
     col2.metric("Bets Placed", len(trades_p))
     col3.metric("Mean BSP", round(placed_evs["bsp"].mean(), 4))
-
+    col4.metric("Mean EV (not placed)", round(np_evs["ev"].mean(), 4))
 ## Look at Specific Accounts
