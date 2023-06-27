@@ -44,6 +44,9 @@ if selected_page == "Home":
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
 
+    col1, col2 = st.columns(2)
+    col1.metric("Total Turnover", trades["stake_size"].sum())
+    col2.metric("Bets Placed", len(trades_p))
 ## Backtesting Page - Test the model on historical data
 elif selected_page == "Backtest":
     st.header("Backtest")
