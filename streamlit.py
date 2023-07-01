@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import datetime
 import numpy as np
 from utils import *
+
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
@@ -27,7 +28,9 @@ trades = pd.DataFrame(list(trades))
 # historic_data = historic_data.find()
 # historic_data = pd.DataFrame(list(historic_data))
 
-selected_page = st.sidebar.selectbox("Select Page", ["Home", "Backtest", "Specific Account"])
+selected_page = st.sidebar.selectbox(
+    "Select Page", ["Home", "Backtest", "Specific Account"]
+)
 
 ## HOME PAGE - overview of total profit/loss and cumulative return
 if selected_page == "Home":
@@ -38,9 +41,9 @@ if selected_page == "Home":
     trades["win_odds"] = pd.to_numeric(trades["win_odds"])
     # trades["bsp"] = pd.to_numeric(trades["bsp"])
     trades["return"] = pd.to_numeric(trades["return"])
-    
+
     trades_p, trades_np = prepare_data(trades)
-    trades_p = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
+    trades_p = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
 
@@ -57,9 +60,9 @@ elif selected_page == "Backtest":
         st.write("This is a user-defined function.")
     """
 
-    with st.form(key='backtest_form'):
+    with st.form(key="backtest_form"):
         user_code = st.text_area("Define your function here:", value=default_function)
-        submit_button = st.form_submit_button(label='Start Backtest')
+        submit_button = st.form_submit_button(label="Start Backtest")
 
     if submit_button:
         # Execute the user-defined code
@@ -77,15 +80,17 @@ elif selected_page == "Backtest":
         st.write("Backtest complete, producing plots and metrics.")
 
 
-else: 
+else:
     # Get all the bookies excluding None entries
     bookies = trades[trades["bookie"].notnull()]["bookie"].unique().tolist()
     bookies.append("All")
 
     selected_bookie = st.sidebar.selectbox("Select Bookie", bookies)
-    
+
     if selected_bookie != "All":
-        usernames = trades[trades["bookie"] == selected_bookie]["username"].unique().tolist()
+        usernames = (
+            trades[trades["bookie"] == selected_bookie]["username"].unique().tolist()
+        )
     else:
         usernames = trades["username"].unique().tolist()
     usernames.append("All")
@@ -93,7 +98,6 @@ else:
     selected_username = st.sidebar.selectbox("Select Username", usernames)
 
     trades_p, trades_np = fetch_data(trades, selected_bookie, selected_username)
-
     # Balance Histogram of EV and 10 Most Recent Trades
     col1, col2, col3 = st.columns(3)
     col1.header(f"Balance for {selected_bookie} - {selected_username}")
@@ -104,8 +108,8 @@ else:
 
     # Histogram of EV
     col2.header(f"EV for {selected_bookie} - {selected_username}")
-    placed_evs = trades_p[(trades_p["bsp"]!= 0.0) & (trades_p["bsp"].notnull())]
-    np_evs = trades_np[(trades_np["bsp"]!= 0.0) & (trades_np["bsp"].notnull())]
+    placed_evs = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
+    np_evs = trades_np[(trades_np["bsp"] != 0.0) & (trades_np["bsp"].notnull())]
 
     placed_evs = calculate_ev(placed_evs)
     np_evs = calculate_ev(np_evs)

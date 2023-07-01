@@ -7,28 +7,42 @@ import matplotlib.pyplot as plt
 
 def filter_data_by_bookie(data, bookie):
     if bookie != "All":
-        data = data[data['bookie'] == bookie]
+        data = data[data["bookie"] == bookie]
     return data
+
 
 def filter_data_by_username(data, username):
     if username != "All":
-        data = data[data['username'] == username]
+        data = data[data["username"] == username]
     return data
+
 
 def calculate_expected_value(p_win, odds_win, p_loss, stake_size):
     ev = (p_win * (odds_win - 1) - p_loss) * stake_size
     return ev
 
-def prepare_data(data):
-    trades_p = data[data["placed"] == "placed"]
-    trades_np = data[data["placed"] != "placed"]
+
+def prepare_data(data, topsport=False):
+    if topsport:
+        trades_p = data[(data["placed"] == "placed") | (data["placed"] == "processing")]
+        trades_np = data[
+            (data["placed"] != "placed") & (data["placed"] != "processing")
+        ]
+    else:
+        trades_p = data[data["placed"] == "placed"]
+        trades_np = data[data["placed"] != "placed"]
     return trades_p, trades_np
+
 
 def fetch_data(data, bookie, username):
     data = filter_data_by_bookie(data, bookie)
     data = filter_data_by_username(data, username)
-    trades_p, trades_np = prepare_data(data)
+    if bookie == "topsport":
+        trades_p, trades_np = prepare_data(data, topsport=True)
+    else:
+        trades_p, trades_np = prepare_data(data)
     return trades_p, trades_np
+
 
 def get_usernames_and_bookies(data):
     usernames = data["username"].unique()
@@ -40,11 +54,12 @@ def get_usernames_and_bookies(data):
     bookies = bookies[bookies != "nan"]
     return usernames, bookies
 
+
 def plot_total_profit_loss(trades):
 
-    trades["clv"] = trades["stake_size"] * (trades["win_odds"]/trades["bsp"] - 1)
+    trades["clv"] = trades["stake_size"] * (trades["win_odds"] / trades["bsp"] - 1)
     trades["cumulative_clv"] = trades["clv"].cumsum()
-    trades["cumulative_profit"] =(trades["return"] - trades["stake_size"]).cumsum()
+    trades["cumulative_profit"] = (trades["return"] - trades["stake_size"]).cumsum()
 
     # Plot both, one filled with orange, one with blue, along index
     fig, ax = plt.subplots(figsize=(20, 10))
@@ -57,6 +72,7 @@ def plot_total_profit_loss(trades):
 
     return fig, trades
 
+
 def plot_balance(trades):
     fig, ax = plt.subplots(figsize=(20, 10))
     ax.plot(trades.index, trades["balance"], color="orange")
@@ -64,6 +80,7 @@ def plot_balance(trades):
     ax.set_xlabel("Trade Number")
     ax.set_ylim(bottom=0)
     return fig
+
 
 def calculate_ev(trades):
     trades["ev"] = trades["win_odds"] / trades["bsp"]
