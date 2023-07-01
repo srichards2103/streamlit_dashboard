@@ -39,6 +39,7 @@ def fetch_data(data, bookie, username):
     data = filter_data_by_username(data, username)
     if bookie == "topsport":
         trades_p, trades_np = prepare_data(data, topsport=True)
+        print("here")
     else:
         trades_p, trades_np = prepare_data(data)
     return trades_p, trades_np
