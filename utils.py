@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import timedelta
 
 
 def filter_data_by_bookie(data, bookie):
@@ -22,12 +23,23 @@ def calculate_expected_value(p_win, odds_win, p_loss, stake_size):
     return ev
 
 
-def prepare_data(data, topsport=False):
+def prepare_data(data, topsport=False, tab=False):
     if topsport:
         trades_p = data[(data["placed"] == "placed") | (data["placed"] == "processing")]
         trades_np = data[
             (data["placed"] != "placed") & (data["placed"] != "processing")
         ]
+    elif tab:
+        # Convert the 'timestamp' column to datetime
+        data["timestamp"] = pd.to_datetime(data["timestamp"])
+
+        # Calculate the cutoff time (when tab started workin)
+        cutoff_time = datetime.datetime(year=2023, month=6, day=30)
+
+        # Filter the data for the past 1.5 days
+        data = data[data["timestamp"] >= cutoff_time]
+        trades_p = data[data["placed"] == "placed"]
+        trades_np = data[data["placed"] != "placed"]
     else:
         trades_p = data[data["placed"] == "placed"]
         trades_np = data[data["placed"] != "placed"]
@@ -40,6 +52,8 @@ def fetch_data(data, bookie, username):
     if bookie == "topsport":
         trades_p, trades_np = prepare_data(data, topsport=True)
         print("here")
+    elif bookie == "tab":
+        trades_p, trades_np = prepare_data(data, tab=True)
     else:
         trades_p, trades_np = prepare_data(data)
     return trades_p, trades_np
