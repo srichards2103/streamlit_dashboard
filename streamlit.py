@@ -52,7 +52,7 @@ projection = {
 def get_data():
     db = client.BettingData
     trades = db.Trades
-    trades = trades.find({}, projection)
+    trades = trades.find()
     trades = pd.DataFrame(list(trades))  # make hashable for st.cache_data
     return trades
 
@@ -71,10 +71,10 @@ if selected_page == "Home":
     trades["stake_size"] = pd.to_numeric(trades["stake_size"])
     trades["win_odds"] = pd.to_numeric(trades["win_odds"])
     # trades["bsp"] = pd.to_numeric(trades["bsp"])
-    trades["return"] = pd.to_numeric(trades["return"])
 
     trades_p, trades_np = prepare_data(trades)
     trades_p = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
+    trades_p["return"] = pd.to_numeric(trades_p["return"])
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
 
