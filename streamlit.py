@@ -37,13 +37,15 @@ def init_connection():
 
 client = init_connection()
 
+projection = {"win_odds": 1, "balance": 1, "stake_size": 1, "best_lay_price": 1}
+
 # Pull data from the collection.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 @st.cache_data(ttl=600)
 def get_data():
     db = client.BettingData
     trades = db.Trades
-    trades = trades.find()
+    trades = trades.find({}, projection)
     trades = pd.DataFrame(list(trades))  # make hashable for st.cache_data
     return trades
 
