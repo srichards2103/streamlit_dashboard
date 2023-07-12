@@ -37,7 +37,14 @@ def init_connection():
 
 client = init_connection()
 
-projection = {"win_odds": 1, "balance": 1, "stake_size": 1, "best_lay_price": 1}
+projection = {
+    "win_odds": 1,
+    "balance": 1,
+    "stake_size": 1,
+    "best_lay_price": 1,
+    "return": 1,
+    "timestampe": 1,
+}
 
 # Pull data from the collection.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
