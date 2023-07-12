@@ -18,15 +18,37 @@ st.sidebar.header("Dashboard `version 2`")
 
 # Connect to MongoDB
 MONGO_URL = st.secrets["MONGO_URL"]
-client = MongoClient(MONGO_URL)
-db = client.BettingData
-trades = db.Trades
+# client = MongoClient(MONGO_URL)
+# db = client.BettingData
+# trades = db.Trades
 # historic_data = db.HistoricData
 ## Fetch data from MongoDB
-trades = trades.find()
-trades = pd.DataFrame(list(trades))
+# trades = trades.find()
+# trades = pd.DataFrame(list(trades))
 # historic_data = historic_data.find()
 # historic_data = pd.DataFrame(list(historic_data))
+
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+    return MongoClient(MONGO_URL)
+
+
+client = init_connection()
+
+# Pull data from the collection.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def get_data():
+    db = client.BettingData
+    trades = db.Trades
+    trades = trades.find()
+    trades = pd.DataFrame(list(trades))  # make hashable for st.cache_data
+    return trades
+
+
+trades = get_data()
 
 selected_page = st.sidebar.selectbox(
     "Select Page", ["Home", "Backtest", "Specific Account"]
