@@ -43,7 +43,7 @@ projection = {
     "stake_size": 1,
     "best_lay_price": 1,
     "return": 1,
-    "timestampe": 1,
+    "timestamp": 1,
 }
 
 # Pull data from the collection.
