@@ -97,6 +97,26 @@ def get_active_accounts(trades):
     return active_accounts
 
 
+def check_banned_status(trades):
+    # Sort trades by timestamp and keep the last 50 entries for each username
+    recent_trades = trades.sort_values("timestamp").groupby("username").tail(50)
+
+    # Count the number of "Bet failed to place" entries in the "placed" column for each username
+    failed_bets = (
+        recent_trades[recent_trades["placed"] == "Bet failed to place"]
+        .groupby("username")
+        .size()
+    )
+
+    # Mark as likely banned if there are more than 5 failed bets
+    banned_status = failed_bets > 5
+
+    # Convert the banned status to a DataFrame
+    banned_status = banned_status.reset_index(name="banned")
+
+    return banned_status
+
+
 ## HOME PAGE - overview of total profit/loss and cumulative return
 if selected_page == "Home":
     # Total profit loss graph
@@ -120,9 +140,6 @@ if selected_page == "Home":
     col1.metric("Total Turnover", trades["stake_size"].sum())
     col2.metric("Bets Placed", len(trades_p))
 
-    # Display the DataFrame
-    st.write(active_accounts)
-
     # Create a bar chart for each metric
     balance_chart = (
         alt.Chart(active_accounts)
@@ -136,34 +153,18 @@ if selected_page == "Home":
         .properties(title="Balance")
     )
 
-    num_trades_chart = (
-        alt.Chart(active_accounts)
-        .mark_bar()
-        .encode(
-            x="username:N",
-            y="num_trades:Q",
-            color="bookie:N",
-            tooltip=["username", "bookie", "num_trades"],
-        )
-        .properties(title="Number of Trades")
-    )
-
-    time_since_last_trade_chart = (
-        alt.Chart(active_accounts)
-        .mark_bar()
-        .encode(
-            x="username:N",
-            y="hours_since_last_trade:Q",
-            color="bookie:N",
-            tooltip=["username", "bookie", "hours_since_last_trade"],
-        )
-        .properties(title="Hours Since Last Trade")
-    )
-
     # Display the charts
     st.altair_chart(balance_chart, use_container_width=True)
-    st.altair_chart(num_trades_chart, use_container_width=True)
-    st.altair_chart(time_since_last_trade_chart, use_container_width=True)
+
+    # Check banned status
+    banned_status = check_banned_status(trades)
+
+    # Display the banned status in a table
+    def color_banned(val):
+        color = "red" if val else "green"
+        return "background-color: %s" % color
+
+    banned_status.style.applymap(color_banned, subset=["banned"])
 
 ## Backtesting Page - Test the model on historical data
 
