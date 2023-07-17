@@ -2,3 +2,4 @@ pymongo
 streamlit
 pandas
 seaborn
+altair

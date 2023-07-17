@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import datetime
 import numpy as np
+import altair as alt
 from utils import *
 
 from datetime import datetime, timedelta
@@ -122,8 +123,67 @@ if selected_page == "Home":
     col2.metric("Bets Placed", len(trades_p))
 
     # Fetch active accounts and display bar chart
-    active_accounts = get_active_accounts()
-    st.bar_chart(active_accounts)
+    active_accounts = get_active_accounts().reset_index()
+
+    # Create a bar chart for each metric
+    balance_chart = (
+        alt.Chart(active_accounts)
+        .mark_bar()
+        .encode(
+            x="username:N",
+            y="balance:Q",
+            color="bookie:N",
+            tooltip=[
+                "username",
+                "bookie",
+                "balance",
+                "num_trades",
+                "hours_since_last_trade",
+            ],
+        )
+        .properties(title="Balance")
+    )
+
+    num_trades_chart = (
+        alt.Chart(active_accounts)
+        .mark_bar()
+        .encode(
+            x="username:N",
+            y="num_trades:Q",
+            color="bookie:N",
+            tooltip=[
+                "username",
+                "bookie",
+                "balance",
+                "num_trades",
+                "hours_since_last_trade",
+            ],
+        )
+        .properties(title="Number of Trades")
+    )
+
+    time_since_last_trade_chart = (
+        alt.Chart(active_accounts)
+        .mark_bar()
+        .encode(
+            x="username:N",
+            y="hours_since_last_trade:Q",
+            color="bookie:N",
+            tooltip=[
+                "username",
+                "bookie",
+                "balance",
+                "num_trades",
+                "hours_since_last_trade",
+            ],
+        )
+        .properties(title="Hours Since Last Trade")
+    )
+
+    # Display the charts
+    st.altair_chart(balance_chart, use_container_width=True)
+    st.altair_chart(num_trades_chart, use_container_width=True)
+    st.altair_chart(time_since_last_trade_chart, use_container_width=True)
 
 ## Backtesting Page - Test the model on historical data
 
