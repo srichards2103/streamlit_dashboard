@@ -125,6 +125,9 @@ if selected_page == "Home":
     # Fetch active accounts and reset the index
     active_accounts = get_active_accounts().reset_index()
 
+    # Display the DataFrame
+    st.write(active_accounts)
+
     # Create a bar chart for each metric
     balance_chart = (
         alt.Chart(active_accounts)
