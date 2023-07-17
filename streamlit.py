@@ -99,8 +99,6 @@ def get_active_accounts():
 
     return active_accounts
 
-    return active_accounts
-
 
 ## HOME PAGE - overview of total profit/loss and cumulative return
 if selected_page == "Home":
