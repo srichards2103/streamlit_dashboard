@@ -98,8 +98,8 @@ def get_active_accounts(trades):
 
 
 def check_banned_status(trades):
-    # Sort trades by timestamp and keep the last 50 entries for each username
-    recent_trades = trades.sort_values("timestamp").groupby("username").tail(50)
+    # Keep the last 50 entries for each username
+    recent_trades = trades.groupby("username").tail(50)
 
     # Count the number of "Bet failed to place" entries in the "placed" column for each username
     failed_bets = (
