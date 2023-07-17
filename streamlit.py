@@ -66,7 +66,7 @@ selected_page = st.sidebar.selectbox(
 )
 
 
-@st.cache(ttl=600)
+# @st.cache(ttl=600)
 def get_active_accounts():
     # Get current time and time 24 hours ago
     now = datetime.now()
