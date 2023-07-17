@@ -82,6 +82,7 @@ def get_active_accounts():
     # Filter trades by status and timestamp
     recent_trades = trades[(trades["timestamp"] >= one_day_ago)]
 
+    st.write(recent_trades)
     # Group trades by account and calculate statistics
     active_accounts = (
         recent_trades.groupby(["username", "bookie"])
