@@ -122,7 +122,7 @@ if selected_page == "Home":
     col1.metric("Total Turnover", trades["stake_size"].sum())
     col2.metric("Bets Placed", len(trades_p))
 
-    # Fetch active accounts and display bar chart
+    # Fetch active accounts and reset the index
     active_accounts = get_active_accounts().reset_index()
 
     # Create a bar chart for each metric
@@ -133,13 +133,7 @@ if selected_page == "Home":
             x="username:N",
             y="balance:Q",
             color="bookie:N",
-            tooltip=[
-                "username",
-                "bookie",
-                "balance",
-                "num_trades",
-                "hours_since_last_trade",
-            ],
+            tooltip=["username", "bookie", "balance"],
         )
         .properties(title="Balance")
     )
@@ -151,13 +145,7 @@ if selected_page == "Home":
             x="username:N",
             y="num_trades:Q",
             color="bookie:N",
-            tooltip=[
-                "username",
-                "bookie",
-                "balance",
-                "num_trades",
-                "hours_since_last_trade",
-            ],
+            tooltip=["username", "bookie", "num_trades"],
         )
         .properties(title="Number of Trades")
     )
@@ -169,13 +157,7 @@ if selected_page == "Home":
             x="username:N",
             y="hours_since_last_trade:Q",
             color="bookie:N",
-            tooltip=[
-                "username",
-                "bookie",
-                "balance",
-                "num_trades",
-                "hours_since_last_trade",
-            ],
+            tooltip=["username", "bookie", "hours_since_last_trade"],
         )
         .properties(title="Hours Since Last Trade")
     )
