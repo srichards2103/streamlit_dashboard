@@ -69,14 +69,20 @@ selected_page = st.sidebar.selectbox(
 @st.cache(ttl=600)
 def get_active_accounts():
     # Get current time and time 24 hours ago
-    now = datetime.utcnow()
+    now = datetime.now()
     one_day_ago = now - timedelta(days=1)
 
     # Fetch trades from the past 24 hours
     db = client.BettingData
     trades = db.Trades
-    recent_trades = trades.find({"timestamp": {"$gte": one_day_ago}})
+    recent_trades = trades.find()
     recent_trades = pd.DataFrame(list(recent_trades))
+
+    # Convert Unix timestamp to datetime
+    recent_trades["timestamp"] = pd.to_datetime(recent_trades["timestamp"], unit="s")
+
+    # Filter out trades from the past 24 hours
+    recent_trades = recent_trades[recent_trades["timestamp"] >= one_day_ago]
 
     # Group trades by account and calculate statistics
     active_accounts = (
