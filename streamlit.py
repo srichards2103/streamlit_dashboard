@@ -79,7 +79,7 @@ def get_active_accounts():
     recent_trades = pd.DataFrame(list(recent_trades))
 
     # Convert Unix timestamp to datetime
-    recent_trades["timestamp"] = pd.to_datetime(recent_trades["timestamp"], unit="s")
+    recent_trades["timestamp"] = pd.to_datetime(recent_trades["timestamp"])
 
     # Filter out trades from the past 24 hours
     recent_trades = recent_trades[recent_trades["timestamp"] >= one_day_ago]
