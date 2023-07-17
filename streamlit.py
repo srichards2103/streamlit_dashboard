@@ -80,9 +80,9 @@ def get_active_accounts():
     trades["timestamp"] = pd.to_datetime(trades["timestamp"])
 
     # Filter trades by status and timestamp
-    recent_trades = recent_trades[
-        (recent_trades["placed"].isin(["placed", "processing"]))
-        & (recent_trades["timestamp"] >= one_day_ago)
+    recent_trades = trades[
+        (trades["placed"].isin(["placed", "processing"]))
+        & (trades["timestamp"] >= one_day_ago)
     ]
 
     # Group trades by account and calculate statistics
