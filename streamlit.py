@@ -111,15 +111,16 @@ if selected_page == "Home":
     trades_p, trades_np = prepare_data(trades)
     trades_p = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     trades_p["return"] = pd.to_numeric(trades_p["return"])
+
+    # Fetch active accounts and reset the index
+    active_accounts = get_active_accounts(trades).reset_index()
+
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
 
     col1, col2 = st.columns(2)
     col1.metric("Total Turnover", trades["stake_size"].sum())
     col2.metric("Bets Placed", len(trades_p))
-
-    # Fetch active accounts and reset the index
-    active_accounts = get_active_accounts(trades).reset_index()
 
     # Display the DataFrame
     st.write(active_accounts)
