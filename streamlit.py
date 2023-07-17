@@ -70,7 +70,7 @@ selected_page = st.sidebar.selectbox(
 # @st.cache(ttl=600)
 def get_active_accounts():
     # Get current time and time 24 hours ago
-    now = datetime.now()
+    now = datetime.utcnow()
     one_day_ago = now - timedelta(days=1)
 
     # Fetch trades from the past 24 hours
