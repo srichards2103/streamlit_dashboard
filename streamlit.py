@@ -7,6 +7,8 @@ import datetime
 import numpy as np
 from utils import *
 
+from datetime import datetime, timedelta
+
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
@@ -63,6 +65,37 @@ selected_page = st.sidebar.selectbox(
     "Select Page", ["Home", "Backtest", "Specific Account"]
 )
 
+
+@st.cache(ttl=600)
+def get_active_accounts():
+    # Get current time and time 24 hours ago
+    now = datetime.utcnow()
+    one_day_ago = now - timedelta(days=1)
+
+    # Fetch trades from the past 24 hours
+    db = client.BettingData
+    trades = db.Trades
+    recent_trades = trades.find({"timestamp": {"$gte": one_day_ago}})
+    recent_trades = pd.DataFrame(list(recent_trades))
+
+    # Group trades by account and calculate statistics
+    active_accounts = (
+        recent_trades.groupby(["username", "bookie"])
+        .agg(
+            {
+                "balance": "last",  # Balance after last trade
+                "timestamp": "count",  # Number of trades
+                "timestamp": lambda x: (now - x.max()).total_seconds() / 3600,
+            }
+        )  # Time since last trade in hours
+        .rename(
+            columns={"timestamp": "num_trades", "timestamp": "hours_since_last_trade"}
+        )
+    )
+
+    return active_accounts
+
+
 ## HOME PAGE - overview of total profit/loss and cumulative return
 if selected_page == "Home":
     # Total profit loss graph
@@ -81,7 +114,14 @@ if selected_page == "Home":
     col1, col2 = st.columns(2)
     col1.metric("Total Turnover", trades["stake_size"].sum())
     col2.metric("Bets Placed", len(trades_p))
+
+    # Fetch active accounts and display bar chart
+    active_accounts = get_active_accounts()
+    st.bar_chart(active_accounts)
+
 ## Backtesting Page - Test the model on historical data
+
+
 elif selected_page == "Backtest":
     st.header("Backtest")
     # Define a default function to be shown to the user
