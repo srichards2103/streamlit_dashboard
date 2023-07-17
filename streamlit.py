@@ -166,6 +166,8 @@ if selected_page == "Home":
 
     banned_status.style.applymap(color_banned, subset=["banned"])
 
+    # Display the DataFrame as a table
+    st.table(banned_status)
 ## Backtesting Page - Test the model on historical data
 
 
