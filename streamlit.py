@@ -75,15 +75,15 @@ def get_active_accounts():
 
     # Fetch trades from the past 24 hours
     db = client.BettingData
-    trades = db.Trades
-    recent_trades = trades.find()
-    recent_trades = pd.DataFrame(list(recent_trades))
 
     # Convert Unix timestamp to datetime
-    recent_trades["timestamp"] = pd.to_datetime(recent_trades["timestamp"])
+    trades["timestamp"] = pd.to_datetime(trades["timestamp"])
 
-    # Filter out trades from the past 24 hours
-    recent_trades = recent_trades[recent_trades["timestamp"] >= one_day_ago]
+    # Filter trades by status and timestamp
+    recent_trades = recent_trades[
+        (recent_trades["placed"].isin(["placed", "processing"]))
+        & (recent_trades["timestamp"] >= one_day_ago)
+    ]
 
     # Group trades by account and calculate statistics
     active_accounts = (
@@ -99,6 +99,8 @@ def get_active_accounts():
             columns={"timestamp": "num_trades", "timestamp": "hours_since_last_trade"}
         )
     )
+
+    return active_accounts
 
     return active_accounts
 
