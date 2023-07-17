@@ -83,22 +83,16 @@ def get_active_accounts(trades):
         & (trades["timestamp"] >= one_day_ago)
     ]
 
-    st.write(recent_trades)
-
     # Group trades by account and calculate statistics
-    active_accounts = (
-        recent_trades.groupby(["username", "bookie"])
-        .agg(
-            {
-                "balance": "last",  # Balance after last trade
-                "timestamp": "count",  # Number of trades
-                "timestamp": lambda x: (now - x.max()).total_seconds() / 3600,
-            }
-        )  # Time since last trade in hours
-        .rename(
-            columns={"timestamp": "num_trades", "timestamp": "hours_since_last_trade"}
-        )
+    active_accounts = recent_trades.groupby(["username", "bookie"]).agg(
+        {
+            "balance": "last",  # Balance after last trade
+            "timestamp": ["count", lambda x: (now - x.max()).total_seconds() / 3600],
+        }
     )
+
+    # Rename columns
+    active_accounts.columns = ["balance", "num_trades", "hours_since_last_trade"]
 
     return active_accounts
 
