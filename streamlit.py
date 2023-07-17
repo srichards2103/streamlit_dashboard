@@ -98,18 +98,8 @@ def get_active_accounts(trades):
 
 
 def check_banned_status(trades):
-    # Get current time and time 24 hours ago
-    now = datetime.utcnow()
-    one_day_ago = now - timedelta(days=1)
-
-    # Convert Unix timestamp to datetime
-    trades["timestamp"] = pd.to_datetime(trades["timestamp"])
-
-    # Filter trades by status and timestamp
-
-    recent_trades = trades[(trades["timestamp"] >= one_day_ago)]
     # Keep the last 50 entries for each username
-    recent_trades = recent_trades.groupby("username").tail(150)
+    recent_trades = trades.groupby("username").tail(150)
 
     # Count the number of unique "selection_id" for "Bet failed to place" entries in the "placed" column for each username
     failed_bets = (
