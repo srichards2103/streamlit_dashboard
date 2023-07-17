@@ -73,14 +73,13 @@ def get_active_accounts(trades):
     now = datetime.utcnow()
     one_day_ago = now - timedelta(days=1)
 
-    # Fetch trades from the past 24 hours
-    db = client.BettingData
-
     # Convert Unix timestamp to datetime
     trades["timestamp"] = pd.to_datetime(trades["timestamp"])
 
     # Filter trades by status and timestamp
-    recent_trades = trades[(trades["timestamp"] >= one_day_ago)]
+    recent_trades = trades[trades["timestamp"] >= one_day_ago]
+
+    st.write(recent_trades)
 
     # Group trades by account and calculate statistics
     active_accounts = (
