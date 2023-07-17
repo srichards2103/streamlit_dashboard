@@ -132,6 +132,15 @@ if selected_page == "Home":
 
     # Fetch active accounts and reset the index
     active_accounts = get_active_accounts(trades).reset_index()
+    # Check banned status
+    banned_status = check_banned_status(trades)
+
+    # Display the banned status in a table
+    def color_banned(val):
+        color = "red" if val else "green"
+        return "background-color: %s" % color
+
+    banned_status.style.applymap(color_banned, subset=["banned"])
 
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
@@ -155,16 +164,6 @@ if selected_page == "Home":
 
     # Display the charts
     st.altair_chart(balance_chart, use_container_width=True)
-
-    # Check banned status
-    banned_status = check_banned_status(trades)
-
-    # Display the banned status in a table
-    def color_banned(val):
-        color = "red" if val else "green"
-        return "background-color: %s" % color
-
-    banned_status.style.applymap(color_banned, subset=["banned"])
 
     # Display the DataFrame as a table
     st.table(banned_status)
