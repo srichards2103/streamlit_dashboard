@@ -68,7 +68,7 @@ selected_page = st.sidebar.selectbox(
 
 
 # @st.cache(ttl=600)
-def get_active_accounts():
+def get_active_accounts(trades):
     # Get current time and time 24 hours ago
     now = datetime.utcnow()
     one_day_ago = now - timedelta(days=1)
@@ -82,7 +82,6 @@ def get_active_accounts():
     # Filter trades by status and timestamp
     recent_trades = trades[(trades["timestamp"] >= one_day_ago)]
 
-    st.write(recent_trades)
     # Group trades by account and calculate statistics
     active_accounts = (
         recent_trades.groupby(["username", "bookie"])
@@ -121,7 +120,7 @@ if selected_page == "Home":
     col2.metric("Bets Placed", len(trades_p))
 
     # Fetch active accounts and reset the index
-    active_accounts = get_active_accounts().reset_index()
+    active_accounts = get_active_accounts(trades).reset_index()
 
     # Display the DataFrame
     st.write(active_accounts)
