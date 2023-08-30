@@ -1,5 +1,6 @@
 import streamlit as st
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -35,7 +36,7 @@ MONGO_URL = st.secrets["MONGO_URL"]
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
-    return MongoClient(MONGO_URL)
+    return MongoClient(MONGO_URL, server_api=ServerApi('1'))
 
 
 client = init_connection()
