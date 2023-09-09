@@ -22,17 +22,7 @@ st.sidebar.header("Dashboard `version 2`")
 
 # Connect to MongoDB
 MONGO_URL = st.secrets["MONGO_URL"]
-# client = MongoClient(MONGO_URL)
-# db = client.BettingData
-# trades = db.Trades
-# historic_data = db.HistoricData
-## Fetch data from MongoDB
-# trades = trades.find()
-# trades = pd.DataFrame(list(trades))
-# historic_data = historic_data.find()
-# historic_data = pd.DataFrame(list(historic_data))
 
-# Initialize connection.
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
@@ -98,24 +88,24 @@ def get_active_accounts(trades):
     return active_accounts
 
 
-def check_banned_status(trades):
-    # Keep the last 50 entries for each username
-    recent_trades = trades.groupby("username").tail(150)
+# def check_banned_status(trades):
+#     # Keep the last 50 entries for each username
+#     recent_trades = trades.groupby("username").tail(150)
 
-    # Count the number of unique "selection_id" for "Bet failed to place" entries in the "placed" column for each username
-    failed_bets = (
-        recent_trades[recent_trades["placed"] == "Bet failed to place"]
-        .groupby("username")["selection_id"]
-        .nunique()  # Count number of unique selection_id
-    )
+#     # Count the number of unique "selection_id" for "Bet failed to place" entries in the "placed" column for each username
+#     failed_bets = (
+#         recent_trades[recent_trades["placed"] == "Bet failed to place"]
+#         .groupby("username")["selection_id"]
+#         .nunique()  # Count number of unique selection_id
+#     )
 
-    # Mark as likely banned if there are more than 5 failed bets
-    banned_status = failed_bets >= 5
+#     # Mark as likely banned if there are more than 5 failed bets
+#     banned_status = failed_bets >= 5
 
-    # Convert the banned status to a DataFrame
-    banned_status = banned_status.reset_index(name="banned")
+#     # Convert the banned status to a DataFrame
+#     banned_status = banned_status.reset_index(name="banned")
 
-    return banned_status
+#     return banned_status
 
 
 ## HOME PAGE - overview of total profit/loss and cumulative return
@@ -134,14 +124,14 @@ if selected_page == "Home":
     # Fetch active accounts and reset the index
     active_accounts = get_active_accounts(trades).reset_index()
     # Check banned status
-    banned_status = check_banned_status(trades)
+    # banned_status = check_banned_status(trades)
 
     # Display the banned status in a table
     def color_banned(val):
         color = "red" if val else "green"
         return "background-color: %s" % color
 
-    banned_status.style.applymap(color_banned, subset=["banned"])
+    # banned_status.style.applymap(color_banned, subset=["banned"])
 
     figure, trades = plot_total_profit_loss(trades_p)
     st.pyplot(figure)
@@ -167,7 +157,29 @@ if selected_page == "Home":
     st.altair_chart(balance_chart, use_container_width=True)
 
     # Display the DataFrame as a table
-    st.table(banned_status)
+    # st.table(banned_status)
+
+    # Display metrics of Mean EV and Number of Bets Placed in last 24 hours for active accounts
+    col1, col2, col3, col4 = st.columns(4)
+
+    # Loop through unique usernames
+    for username in active_accounts['username'].unique():
+        user_data = trades[trades['username'] == username]  # Fetch user trades data
+
+        # Filter trades placed in the last 24 hours
+        now = datetime.utcnow()
+        one_day_ago = now - timedelta(days=1)
+        user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
+        user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
+
+        # Calculate metrics
+        # mean_ev = round(user_recent_trades['ev'].mean(), 4)
+        bets_placed = len(user_recent_trades[user_recent_trades['placed'] == 'placed'])
+
+        # Display metrics
+        col1 = st.columns(1)
+        # col1.metric(f"{username} - Mean EV", mean_ev)
+        col2.metric(f"{username} - Bets Placed", bets_placed)
 ## Backtesting Page - Test the model on historical data
 
 
