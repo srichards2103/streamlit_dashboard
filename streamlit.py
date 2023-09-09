@@ -175,11 +175,13 @@ if selected_page == "Home":
         # Calculate metrics
         # mean_ev = round(user_recent_trades['ev'].mean(), 4)
         bets_placed = len(user_recent_trades[user_recent_trades['placed'] == 'placed'])
-
+        logged_out_count = len(user_recent_trades[user_recent_trades['placed'] == 'Logged out'])
         # Display metrics
-        col1 = st.columns(1)
+        col1, col2 = st.columns(1)
         # col1.metric(f"{username} - Mean EV", mean_ev)
-        col2.metric(f"{username} - Bets Placed", bets_placed)
+        col1.metric(f"{username} - Bets Placed", bets_placed)
+        col2.metric(f"{username} - Logged Out", logged_out_count)
+        
 ## Backtesting Page - Test the model on historical data
 
 
