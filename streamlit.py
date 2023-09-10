@@ -164,7 +164,7 @@ if selected_page == "Home":
 
     # Loop through unique usernames
     for username in active_accounts['username'].unique():
-        user_data = trades[trades['username'] == username]  # Fetch user trades data
+        user_data = trades_p[trades_p['username'] == username]  # Fetch user trades data
 
         # Filter trades placed in the last 24 hours
         now = datetime.utcnow()
