@@ -168,7 +168,7 @@ if selected_page == "Home":
 
         # Filter trades placed in the last 24 hours
         now = datetime.utcnow()
-        one_day_ago = now - timedelta(days=1)
+        one_day_ago = now - timedelta(days=2)
         user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
         user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
 
