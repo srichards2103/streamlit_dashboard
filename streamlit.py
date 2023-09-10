@@ -170,6 +170,7 @@ if selected_page == "Home":
         now = datetime.utcnow()
         one_day_ago = now - timedelta(days=1, hours=10)
         user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
+        print(user_data["timestamp"][-1])
         user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
 
         # Calculate metrics
