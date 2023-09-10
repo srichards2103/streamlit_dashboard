@@ -266,4 +266,9 @@ else:
     col2.metric("Bets Placed", len(trades_p))
     col3.metric("Mean BSP", round(placed_evs["bsp"].mean(), 4))
     col4.metric("Mean EV (not placed)", round(np_evs["ev"].mean(), 4))
+
+    col1, col2 = st.columns(2)
+    # Total Staked
+    col1.metric("Total Staked", trades_p["stake_size"].sum())
+    
 ## Look at Specific Accounts
