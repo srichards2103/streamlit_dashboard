@@ -121,7 +121,7 @@ if selected_page == "Home":
     trades_p = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     trades_p["return"] = pd.to_numeric(trades_p["return"])
 
-    trades_p["return"] = trades_p["stake_size"] * (trades_p["win_odds"] - 1) if trades_p["win"] == True else 0
+    trades_p['return'] = trades_p.apply(lambda row: row['stake_size'] * (row['win_odds'] - 1) if row['win'] else 0, axis=1)
     # Fetch active accounts and reset the index
     active_accounts = get_active_accounts(trades).reset_index()
     # Check banned status
