@@ -113,7 +113,10 @@ if selected_page == "Home":
     # Total profit loss graph
     # Filter out null bsp and zero bsp
     # Ensure the columns are numeric and replace any infinities or NaNs with 0
+    
+    trades["stake_size"] = trades["stake_size"].replace("NULL", 0)
     trades["stake_size"] = pd.to_numeric(trades["stake_size"])
+
     trades["win_odds"] = pd.to_numeric(trades["win_odds"])
     # trades["bsp"] = pd.to_numeric(trades["bsp"])
 
@@ -160,28 +163,28 @@ if selected_page == "Home":
     # Display the DataFrame as a table
     # st.table(banned_status)
 
-    # Display metrics of Mean EV and Number of Bets Placed in last 24 hours for active accounts
-    col1, col2, col3, col4 = st.columns(4)
+    # # Display metrics of Mean EV and Number of Bets Placed in last 24 hours for active accounts
+    # col1, col2, col3, col4 = st.columns(4)
 
-    # Loop through unique usernames
-    for username in active_accounts['username'].unique():
-        user_data = trades_p[trades_p['username'] == username]  # Fetch user trades data
+    # # Loop through unique usernames
+    # for username in active_accounts['username'].unique():
+    #     user_data = trades_p[trades_p['username'] == username]  # Fetch user trades data
 
-        # Filter trades placed in the last 24 hours
-        now = datetime.utcnow()
-        one_day_ago = now - timedelta(days=2)
-        user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
-        user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
+    #     # Filter trades placed in the last 24 hours
+    #     now = datetime.utcnow()
+    #     one_day_ago = now - timedelta(days=2)
+    #     user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
+    #     user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
 
-        # Calculate metrics
-        # mean_ev = round(user_recent_trades['ev'].mean(), 4)
-        bets_placed = len(user_recent_trades[user_recent_trades['placed'] == 'placed'])
-        logged_out_count = len(user_recent_trades[user_recent_trades['placed'] == 'Logged out'])
-        # Display metrics
-        col1, col2 = st.columns(2)
-        # col1.metric(f"{username} - Mean EV", mean_ev)
-        col1.metric(f"{username} - Bets Placed", bets_placed)
-        col2.metric(f"{username} - Logged Out", logged_out_count)
+    #     # Calculate metrics
+    #     # mean_ev = round(user_recent_trades['ev'].mean(), 4)
+    #     bets_placed = len(user_recent_trades[user_recent_trades['placed'] == 'placed'])
+    #     logged_out_count = len(user_recent_trades[user_recent_trades['placed'] == 'Logged out'])
+    #     # Display metrics
+    #     col1, col2 = st.columns(2)
+    #     # col1.metric(f"{username} - Mean EV", mean_ev)
+    #     col1.metric(f"{username} - Bets Placed", bets_placed)
+    #     col2.metric(f"{username} - Logged Out", logged_out_count)
         
 ## Backtesting Page - Test the model on historical data
 
