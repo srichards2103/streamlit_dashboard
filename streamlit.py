@@ -47,7 +47,9 @@ def get_data():
     db = client.BettingData
     trades = db.Trades
     trades = trades.find()
-    trades = pd.DataFrame(list(trades))  # make hashable for st.cache_data
+    trades = pd.DataFrame(list(trades)) 
+    trades['username'] = trades['username'].astype(str)
+ # make hashable for st.cache_data
     return trades
 
 
