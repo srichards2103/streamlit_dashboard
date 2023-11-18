@@ -162,34 +162,6 @@ if selected_page == "Home":
     # Display the charts
     st.altair_chart(balance_chart, use_container_width=True)
 
-    # Display the DataFrame as a table
-    # st.table(banned_status)
-
-    # # Display metrics of Mean EV and Number of Bets Placed in last 24 hours for active accounts
-    # col1, col2, col3, col4 = st.columns(4)
-
-    # # Loop through unique usernames
-    # for username in active_accounts['username'].unique():
-    #     user_data = trades_p[trades_p['username'] == username]  # Fetch user trades data
-
-    #     # Filter trades placed in the last 24 hours
-    #     now = datetime.utcnow()
-    #     one_day_ago = now - timedelta(days=2)
-    #     user_data["timestamp"] = pd.to_datetime(user_data["timestamp"])
-    #     user_recent_trades = user_data[user_data["timestamp"] >= one_day_ago]
-
-    #     # Calculate metrics
-    #     # mean_ev = round(user_recent_trades['ev'].mean(), 4)
-    #     bets_placed = len(user_recent_trades[user_recent_trades['placed'] == 'placed'])
-    #     logged_out_count = len(user_recent_trades[user_recent_trades['placed'] == 'Logged out'])
-    #     # Display metrics
-    #     col1, col2 = st.columns(2)
-    #     # col1.metric(f"{username} - Mean EV", mean_ev)
-    #     col1.metric(f"{username} - Bets Placed", bets_placed)
-    #     col2.metric(f"{username} - Logged Out", logged_out_count)
-        
-## Backtesting Page - Test the model on historical data
-
 
 elif selected_page == "Backtest":
     st.header("Backtest")
@@ -276,5 +248,21 @@ else:
     col1, col2 = st.columns(2)
     # Total Staked
     col1.metric("Total Staked", trades_p["stake_size"].sum())
+
+    # Get current time and time 24 hours ago
+    now = datetime.utcnow()
+    one_day_ago = now - timedelta(days=1)
+
+    # Convert Unix timestamp to datetime
+    trades_p["timestamp"] = pd.to_datetime(trades_p["timestamp"])
+
+    # Filter trades by status and timestamp
+
+    recent_trades = trades_p[
+        (trades["placed"].isin(["placed", "processing"]))
+        & (trades["timestamp"] >= one_day_ago)
+    ]
+
+    col2.metric("Trades past 24 hours", len(recent_trades))
     
 ## Look at Specific Accounts
