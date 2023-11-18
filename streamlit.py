@@ -259,8 +259,8 @@ else:
     # Filter trades by status and timestamp
 
     recent_trades = trades_p[
-        (trades["placed"].isin(["placed", "processing"]))
-        & (trades["timestamp"] >= one_day_ago)
+        (trades_p["placed"].isin(["placed", "processing"]))
+        & (trades_p["timestamp"] >= one_day_ago)
     ]
 
     col2.metric("Trades past 24 hours", len(recent_trades))
