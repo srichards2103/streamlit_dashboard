@@ -223,9 +223,8 @@ else:
     placed_evs = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     np_evs = trades_np[(trades_np["bsp"] != 0.0) & (trades_np["bsp"].notnull())]
 
-    placed_evs = placed_evs.dropna()
-    np_evs = np_evs.dropna()
-
+    placed_evs = calculate_ev(placed_evs)
+    np_evs = calculate_ev(np_evs)
 
     placed_evs.fillna(value=0, inplace=True)
     np_evs.fillna(value=0, inplace=True)
