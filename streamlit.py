@@ -226,8 +226,8 @@ else:
     placed_evs = calculate_ev(placed_evs)
     np_evs = calculate_ev(np_evs)
 
-    placed_evs.fillna(value=0, inplace=True)
-    np_evs.fillna(value=0, inplace=True)
+    # placed_evs.fillna(value=0, inplace=True)
+    # np_evs.fillna(value=0, inplace=True)
 
     # plot with seaborn distplot
     figure = plt.figure(figsize=(10, 5))
