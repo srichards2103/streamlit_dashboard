@@ -223,13 +223,18 @@ else:
     placed_evs = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     np_evs = trades_np[(trades_np["bsp"] != 0.0) & (trades_np["bsp"].notnull())]
 
-    placed_evs = calculate_ev(placed_evs)
-    np_evs = calculate_ev(np_evs)
+    placed_evs = placed_evs.dropna()
+    np_evs = np_evs.dropna()
+
+
+    placed_evs.fillna(value=0, inplace=True)
+    np_evs.fillna(value=0, inplace=True)
 
     # plot with seaborn distplot
     figure = plt.figure(figsize=(10, 5))
-    sns.distplot(placed_evs["ev"], label="placed")
-    sns.distplot(np_evs["ev"], label="not placed")
+    sns.histplot(placed_evs["ev"], kde=True, label="placed")
+    sns.histplot(np_evs["ev"], kde=True, label="not placed")
+
     plt.legend()
     col2.pyplot(figure)
 
