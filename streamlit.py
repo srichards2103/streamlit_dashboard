@@ -61,6 +61,7 @@ def get_data():
         "username": 1,
         "placed": 1,
         "bookie": 1,
+        "bsp": 1,
     }  # Only load necessary fields
     trades = pd.DataFrame(list(trades.find(query, projection)))
     trades["username"] = trades["username"].astype(str)
