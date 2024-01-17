@@ -8,6 +8,7 @@ import datetime
 import numpy as np
 import altair as alt
 from utils import *
+import os
 
 from datetime import datetime, timedelta
 
@@ -21,7 +22,9 @@ st.sidebar.header("Dashboard `version 2`")
 # ... rest of your sidebar settings ...
 
 # Connect to MongoDB
-MONGO_URL = st.secrets["MONGO_URL"]
+# MONGO_URL = st.secrets["MONGO_URL"]
+
+MONGO_URL = os.environ.get("MONGO_URL")
 
 # Uses st.cache_resource to only run once.
 @st.cache_resource
