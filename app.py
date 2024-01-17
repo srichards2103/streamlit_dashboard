@@ -50,9 +50,18 @@ def get_data():
     db = client.BettingData
     trades = db.Trades
     trades = trades.find()
-    trades = pd.DataFrame(list(trades))
+    query = {}  # Modify this to filter data as needed
+    projection = {
+        "_id": 0,
+        "win_odds": 1,
+        "balance": 1,
+        "stake_size": 1,
+        "best_lay_price": 1,
+        "return": 1,
+        "timestamp": 1,
+    }  # Only load necessary fields
+    trades = pd.DataFrame(list(trades.find(query, projection)))
     trades["username"] = trades["username"].astype(str)
-    # make hashable for st.cache_data
     return trades
 
 
