@@ -49,7 +49,6 @@ projection = {
 def get_data():
     db = client.BettingData
     trades = db.Trades
-    trades = trades.find()
     query = {}  # Modify this to filter data as needed
     projection = {
         "_id": 0,
