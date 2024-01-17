@@ -1,4 +1,4 @@
-import app as st
+import streamlit as st
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import pandas as pd
