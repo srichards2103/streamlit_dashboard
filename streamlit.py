@@ -11,7 +11,7 @@ from utils import *
 
 from datetime import datetime, timedelta
 
-st.set_page_config(layout="wide", initial_sidebar_state="expanded")
+# st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -26,7 +26,7 @@ MONGO_URL = st.secrets["MONGO_URL"]
 # Uses st.cache_resource to only run once.
 @st.cache_resource
 def init_connection():
-    return MongoClient(MONGO_URL, server_api=ServerApi('1'))
+    return MongoClient(MONGO_URL, server_api=ServerApi("1"))
 
 
 client = init_connection()
@@ -47,9 +47,9 @@ def get_data():
     db = client.BettingData
     trades = db.Trades
     trades = trades.find()
-    trades = pd.DataFrame(list(trades)) 
-    trades['username'] = trades['username'].astype(str)
- # make hashable for st.cache_data
+    trades = pd.DataFrame(list(trades))
+    trades["username"] = trades["username"].astype(str)
+    # make hashable for st.cache_data
     return trades
 
 
@@ -115,7 +115,7 @@ if selected_page == "Home":
     # Total profit loss graph
     # Filter out null bsp and zero bsp
     # Ensure the columns are numeric and replace any infinities or NaNs with 0
-    
+
     trades["stake_size"] = trades["stake_size"].replace("NULL", 0)
     trades["stake_size"] = pd.to_numeric(trades["stake_size"])
 
@@ -126,7 +126,9 @@ if selected_page == "Home":
     trades_p = trades_p[(trades_p["bsp"] != 0.0) & (trades_p["bsp"].notnull())]
     trades_p["return"] = pd.to_numeric(trades_p["return"])
 
-    trades_p['return'] = trades_p.apply(lambda row: row['stake_size'] * row['win_odds'] if row['win'] else 0, axis=1)
+    trades_p["return"] = trades_p.apply(
+        lambda row: row["stake_size"] * row["win_odds"] if row["win"] else 0, axis=1
+    )
     # Fetch active accounts and reset the index
     active_accounts = get_active_accounts(trades).reset_index()
     # Check banned status
@@ -268,5 +270,5 @@ else:
     ]
 
     col2.metric("Trades past 24 hours", len(recent_trades))
-    
+
 ## Look at Specific Accounts
