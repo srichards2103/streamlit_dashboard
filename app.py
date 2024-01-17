@@ -1,4 +1,4 @@
-import streamlit as st
+import app as st
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import pandas as pd
@@ -11,7 +11,7 @@ from utils import *
 
 from datetime import datetime, timedelta
 
-# st.set_page_config(layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
